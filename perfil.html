@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Perfil do Usuário</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #f0f2f5;
+            margin: 0;
+            padding: 20px;
+        }
+        #profile-container {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            max-width: 600px;
+            margin: auto;
+            transition: transform 0.3s ease;
+        }
+        #profile-container:hover {
+            transform: translateY(-5px);
+        }
+        h1 {
+            text-align: center;
+            color: #1877f2;
+            margin-bottom: 20px;
+        }
+        .user-info {
+            margin: 15px 0;
+            padding: 10px;
+            border-radius: 5px;
+            background-color: #f7f7f7;
+            border: 1px solid #e9ebee;
+            transition: background-color 0.3s;
+        }
+        .user-info:hover {
+            background-color: #e9eff5;
+        }
+        .label {
+            font-weight: bold;
+            color: #555;
+        }
+        .add-phone {
+            color: #1877f2;
+            cursor: pointer;
+            text-decoration: underline;
+            margin-top: 10px;
+            display: none;
+        }
+        .phone-input-container {
+            display: none;
+            margin-top: 10px;
+        }
+        input[type="text"] {
+            width: calc(100% - 22px);
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin-top: 5px;
+        }
+        button {
+            background-color: #1877f2;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 10px;
+            transition: background-color 0.3s ease;
+        }
+        button:hover {
+            background-color: #165eab;
+        }
+        .back-button {
+            background-color: transparent;
+            color: #1877f2;
+            border: 1px solid #1877f2;
+            margin-bottom: 20px;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+        .back-button:hover {
+            background-color: #e9eff5;
+            color: #165eab;
+        }
+    </style>
+</head>
+<body>
+    <div id="profile-container">
+        <button class="back-button" onclick="window.location.href='/dashboard'">Voltar</button>
+        <h1>Meu Perfil</h1>
+
+        <div class="user-info" id="user-info">Carregando informações do usuário...</div>
+        
+        <div class="phone-input-container" id="phone-input-container">
+            <label class="label">Adicionar Telefone:</label>
+            <input type="text" id="phone-input" placeholder="Digite seu telefone">
+            <button id="save-phone">Salvar Telefone</button>
+        </div>
+        <div class="add-phone" id="add-phone">Adicionar Telefone</div>
+    </div>
+
+    <script>
+        fetch('http://localhost:3001/api/user-info')
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                const userInfoElement = document.getElementById('user-info');
+                userInfoElement.innerHTML = `
+                    <span class="label">Nome:</span> ${data.name}<br>
+                    <span class="label">Email:</span> ${data.email}<br>
+                    <span class="label">Telefone:</span> ${data.phone ? data.phone : 'Não cadastrado'}
+                `;
+
+                const addPhoneElement = document.getElementById('add-phone');
+                const phoneInputContainer = document.getElementById('phone-input-container');
+
+                if (!data.phone) {
+                    addPhoneElement.style.display = 'block';
+                } else {
+                    addPhoneElement.style.display = 'none';
+                }
+
+                addPhoneElement.addEventListener('click', () => {
+                    phoneInputContainer.style.display = 'block';
+                    addPhoneElement.style.display = 'none';
+                });
+            })
+            .catch(error => {
+                console.error('Houve um problema com a requisição:', error);
+                document.getElementById('user-info').innerHTML = 'Erro ao carregar informações.';
+            });
+
+        document.getElementById('save-phone').addEventListener('click', () => {
+            const phone = document.getElementById('phone-input').value;
+            if (phone) {
+                fetch('http://localhost:3001/api/update-phone', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ phone })
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Erro ao atualizar telefone');
+                    }
+                    alert('Telefone atualizado com sucesso!');
+                    location.reload();
+                })
+                .catch(error => {
+                    console.error('Erro:', error);
+                    alert('Falha ao atualizar telefone.');
+                });
+            } else {
+                alert('Por favor, insira um telefone válido.');
+            }
+        });
+    </script>
+</body>
+</html>

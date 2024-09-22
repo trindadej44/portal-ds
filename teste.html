@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista de Cursos</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+        header {
+            background-color: #0073e6;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+        .container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            padding: 20px;
+        }
+        .filter {
+            width: 20%;
+            background-color: #fff;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            margin-right: 20px;
+        }
+        .filter h2 {
+            margin-bottom: 20px;
+        }
+        .filter input[type="checkbox"] {
+            margin-right: 10px;
+        }
+        .filter label {
+            display: block;
+            margin-bottom: 10px;
+            cursor: pointer;
+        }
+        .filter input[type="text"] {
+            width: calc(100% - 20px);
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .courses {
+            width: 75%;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+        }
+        .course-card {
+            width: 30%;
+            background-color: #fff;
+            margin-bottom: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            transition: transform 0.3s;
+            cursor: pointer;
+            text-align: center;
+            padding: 15px;
+        }
+        .course-card:hover {
+            transform: translateY(-5px);
+        }
+        .course-card img {
+            width: 100%;
+            height: auto;
+            border-bottom: 1px solid #ddd;
+        }
+        .course-card h4 {
+            margin: 15px 0 10px;
+            font-size: 18px;
+            color: #0073e6;
+        }
+        .course-card p {
+            margin: 0 0 10px;
+            color: #666;
+            font-size: 14px;
+        }
+        .course-card .details {
+            font-size: 12px;
+            color: #999;
+        }
+        /* Estilo do modal */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgb(0,0,0);
+            background-color: rgba(0,0,0,0.4);
+            padding-top: 60px;
+        }
+        .modal-content {
+            background-color: #fefefe;
+            margin: 5% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            max-width: 600px;
+            border-radius: 10px;
+        }
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        @media screen and (max-width: 768px) {
+            .container {
+                flex-direction: column;
+                align-items: center;
+            }
+            .filter,
+            .courses {
+                width: 100%;
+            }
+            .course-card {
+                width: 48%;
+            }
+        }
+        @media screen and (max-width: 480px) {
+            .course-card {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Lista de Cursos</h1>
+    </header>
+    <div class="container">
+        <div class="filter">
+            <h2>Filtros</h2>
+            <input type="text" id="searchInput" placeholder="Pesquise..." onkeyup="filterCourses()">
+            <h3>Método de Aprendizagem</h3>
+            <label>
+                <input type="checkbox" class="filter-checkbox" data-filter="Bootcamp" onchange="filterCourses()"> Bootcamp
+            </label>
+            <label>
+                <input type="checkbox" class="filter-checkbox" data-filter="Formação" onchange="filterCourses()"> Formação
+            </label>
+            <label>
+                <input type="checkbox" class="filter-checkbox" data-filter="Codecamp" onchange="filterCourses()"> Codecamp
+            </label>
+        </div>
+        <div class="courses" id="coursesList"></div>
+    </div>
+
+    <!-- Modal -->
+    <div id="courseModal" class="modal">
+        <div class="modal-content">
+            <span class="close" id="closeModal">&times;</span>
+            <h2 id="modalTitle"></h2>
+            <img id="modalImage" src="" alt="" style="width: 100%; height: auto; border-bottom: 1px solid #ddd;">
+            <p id="modalInstructor"></p>
+            <p id="modalDuration"></p>
+            <p id="modalCategory"></p>
+            <p id="modalDescription"></p>
+            <button id="enrollButton">Matricular-se</button>
+        </div>
+    </div>
+
+    <script>
+        fetch('http://localhost:3001/api/courses')
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                const coursesList = document.getElementById('coursesList');
+                coursesList.innerHTML = '';
+
+                data.forEach(curso => {
+                    const courseCard = document.createElement('div');
+                    courseCard.className = 'course-card';
+                    courseCard.setAttribute('data-title', curso.name);
+                    courseCard.setAttribute('data-category', curso.categoria);
+                    courseCard.setAttribute('data-instructor', curso.instrutor);
+                    courseCard.setAttribute('data-duration', curso.duracao);
+                    courseCard.setAttribute('data-description', curso.description);
+                    courseCard.setAttribute('data-image', curso.imagem_url);
+                    courseCard.innerHTML = `
+                        <img src="${curso.imagem_url}" alt="${curso.name}">
+                        <h4>${curso.name}</h4>
+                        <p><strong>Instrutor:</strong> ${curso.instrutor}</p>
+                        <p><strong>Duração:</strong> ${curso.duracao} horas</p>
+                        <p><strong>Categoria:</strong> ${curso.categoria}</p>
+                        <p>${curso.description}</p>
+                    `;
+                    courseCard.onclick = () => openModal(curso);
+                    coursesList.appendChild(courseCard);
+                });
+            })
+            .catch(error => {
+                console.error('Houve um problema com a requisição:', error);
+                document.getElementById('coursesList').innerHTML = 'Erro ao carregar cursos.';
+            });
+
+        function filterCourses() {
+            const searchInput = document.getElementById('searchInput').value.toLowerCase();
+            const checkboxes = document.querySelectorAll('.filter-checkbox:checked');
+            const selectedFilters = Array.from(checkboxes).map(checkbox => checkbox.getAttribute('data-filter'));
+            const courseCards = document.querySelectorAll('.course-card');
+
+            courseCards.forEach(card => {
+                const title = card.getAttribute('data-title').toLowerCase();
+                const category = card.getAttribute('data-category');
+
+                const matchesSearch = title.includes(searchInput);
+                const matchesFilter = selectedFilters.length === 0 || selectedFilters.includes(category);
+
+                if (matchesSearch && matchesFilter) {
+                    card.style.display = '';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+
+        function openModal(curso) {
+            document.getElementById('modalTitle').textContent = curso.name;
+            document.getElementById('modalImage').src = curso.imagem_url;
+            document.getElementById('modalInstructor').textContent = `Instrutor: ${curso.instrutor}`;
+            document.getElementById('modalDuration').textContent = `Duração: ${curso.duracao} horas`;
+            document.getElementById('modalCategory').textContent = `Categoria: ${curso.categoria}`;
+            document.getElementById('modalDescription').textContent = curso.description;
+
+            const modal = document.getElementById('courseModal');
+            modal.style.display = "block";
+
+            document.getElementById('closeModal').onclick = function() {
+                modal.style.display = "none";
+            };
+
+            window.onclick = function(event) {
+                if (event.target === modal) {
+                    modal.style.display = "none";
+                }
+            };
+
+            document.getElementById('enrollButton').onclick = function() {
+                // Lógica para matrícula (pode ser uma requisição para o servidor)
+                alert(`Você se matriculou no curso: ${curso.name}`);
+                modal.style.display = "none";
+            };
+        }
+    </script>
+</body>
+</html>

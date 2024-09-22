@@ -1,0 +1,483 @@
+    <!DOCTYPE html>
+    <html lang="pt-BR">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Catálogo de Cursos</title>
+        <style>
+            body {
+                font-family: Arial, sans-serif;
+                background-color: #f4f4f9;
+                color: #333;
+                margin: 0;
+                padding: 0;
+            }
+
+            header {
+                background-color: #0073e6;
+                color: white;
+                padding: 20px;
+                text-align: center;
+            }
+
+            .container {
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: space-between;
+                padding: 20px;
+            }
+
+            .filter {
+                width: 20%;
+                background-color: #fff;
+                padding: 20px;
+                box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+                border-radius: 10px;
+            }
+
+            .filter h2 {
+                margin-bottom: 20px;
+            }
+
+            .filter input[type="checkbox"] {
+                margin-right: 10px;
+            }
+
+            .filter label {
+                display: block;
+                margin-bottom: 10px;
+                cursor: pointer;
+            }
+
+            .filter input[type="text"] {
+                width: calc(100% - 20px);
+                padding: 10px;
+                border: 1px solid #ddd;
+                border-radius: 5px;
+                margin-bottom: 20px;
+            }
+
+            .courses {
+                width: 75%;
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: space-between;
+            }
+
+            .course-card {
+                width: 30%;
+                background-color: #fff;
+                margin-bottom: 20px;
+                border-radius: 10px;
+                box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+                overflow: hidden;
+                transition: transform 0.3s;
+                cursor: pointer;
+                text-align: center;
+                padding: 15px;
+            }
+
+            .course-card:hover {
+                transform: translateY(-5px);
+            }
+
+            .course-card img {
+                width: 100%;
+                height: auto;
+                border-bottom: 1px solid #ddd;
+            }
+
+            .course-card h4 {
+                margin: 15px 0 10px;
+                font-size: 18px;
+                color: #0073e6;
+            }
+
+            .course-card p {
+                margin: 0 0 10px;
+                color: #666;
+                font-size: 14px;
+            }
+
+            .course-card .details {
+                font-size: 12px;
+                color: #999;
+            }
+
+            .badge {
+                background-color: #0073e6;
+                color: white;
+                padding: 5px 10px;
+                font-size: 12px;
+                position: absolute;
+                top: 10px;
+                left: 10px;
+                border-radius: 5px;
+            }
+
+            .modal {
+                display: none;
+                position: fixed;
+                z-index: 1000;
+                left: 0;
+                top: 0;
+                width: 100%;
+                height: 100%;
+                background-color: rgba(0, 0, 0, 0.7);
+                justify-content: center;
+                align-items: center;
+            }
+
+            .modal-content {
+                background-color: #fff;
+                padding: 20px;
+                border-radius: 10px;
+                max-width: 500px;
+                width: 80%;
+                text-align: center;
+            }
+
+            .modal img {
+                width: 100%;
+                border-radius: 10px;
+                margin-bottom: 20px;
+            }
+
+            .modal h2 {
+                margin-bottom: 20px;
+                font-size: 24px;
+                color: #0073e6;
+            }
+
+            .modal p {
+                color: #666;
+                font-size: 16px;
+                margin-bottom: 20px;
+            }
+
+            .modal button {
+                background-color: #0073e6;
+                color: white;
+                padding: 10px 20px;
+                border: none;
+                border-radius: 5px;
+                cursor: pointer;
+                font-size: 16px;
+            }
+
+            .modal button:hover {
+                background-color: #005bb5;
+            }
+
+            .close {
+                position: absolute;
+                top: 10px;
+                right: 20px;
+                font-size: 30px;
+                cursor: pointer;
+                color: #333;
+            }
+
+            @media screen and (max-width: 768px) {
+                .container {
+                    flex-direction: column;
+                    align-items: center;
+                }
+
+                .filter,
+                .courses {
+                    width: 100%;
+                }
+
+                .course-card {
+                    width: 48%;
+                }
+            }
+
+            @media screen and (max-width: 480px) {
+                .course-card {
+                    width: 100%;
+                }
+            }
+
+            
+        </style>
+    </head>
+
+    <body>
+        <header>
+            <h1>Catálogo de Cursos</h1>
+        </header>
+        <div class="container">
+            <div class="filter">
+                <h2>Filtros</h2>
+                <input type="text" id="searchInput" placeholder="Pesquise..." onkeyup="filterCourses()">
+                <h3>Método de Aprendizagem</h3>
+                <label>
+                    <input type="checkbox" class="filter-checkbox" data-filter="Bootcamp"> Bootcamp
+                </label>
+                <label>
+                    <input type="checkbox" class="filter-checkbox" data-filter="Formação"> Formação
+                </label>
+                <label>
+                    <input type="checkbox" class="filter-checkbox" data-filter="Codecamp"> Codecamp
+                </label>
+                <!-- Adicione mais filtros conforme necessário -->
+            </div>
+
+            <div class="courses" id="coursesList">
+                <div class="course-card" data-title="Front-end do Zero" data-category="Bootcamp">
+                    <img src="https://img.youtube.com/vi/qxzqEuAOYZ4/maxresdefault.jpg" alt="Front-end do Zero">
+                    <h4>Front-end do Zero</h4>
+                    <p>Domine HTML, CSS e JavaScript com este curso completo.</p>
+                    <div class="details">
+                        <p><strong>Instrutor:</strong> João Silva</p>
+                        <p><strong>Duração:</strong> 40 horas</p>
+                    </div>
+                </div>
+                <div class="course-card" data-title="Back-end com .NET" data-category="Formação">
+                    <img src="https://i.ytimg.com/vi/OgXHKNjt1DU/hq720.jpg?sqp=-oaymwEcCNAFEJQDSFXyq4qpAw4IARUAAIhCGAFwAcABBg==&rs=AOn4CLCeddd5H3TJlxosAZ4GovaT7T6b7g" alt="Back-end com .NET">
+                    <h4>Back-end com .NET</h4>
+                    <p>Aprenda a desenvolver sistemas back-end robustos.</p>
+                    <div class="details">
+                        <p><strong>Instrutor:</strong> Maria Oliveira</p>
+                        <p><strong>Duração:</strong> 50 horas</p>
+                    </div>
+                </div>
+                <div class="course-card" data-title="Desenvolvimento Mobile" data-category="Bootcamp">
+                    <img src="https://i.ytimg.com/vi/NkBcU8biV4s/hq720.jpg?sqp=-oaymwEcCNAFEJQDSFXyq4qpAw4IARUAAIhCGAFwAcABBg==&rs=AOn4CLBUYVV34NFi4VqMA3Oqxj60X4MmxQ" alt="Desenvolvimento Mobile">
+                    <h4>Desenvolvimento Mobile</h4>
+                    <p>Crie aplicativos móveis para Android e iOS.</p>
+                    <div class="details">
+                        <p><strong>Instrutor:</strong> Ana Santos</p>
+                        <p><strong>Duração:</strong> 60 horas</p>
+                    </div>
+                </div>
+                <div class="course-card" data-title="Data Science com Python" data-category="Formação">
+                    <img src="https://i.ytimg.com/vi/bEs1OKnuSaA/hq720.jpg?sqp=-oaymwEcCNAFEJQDSFXyq4qpAw4IARUAAIhCGAFwAcABBg==&rs=AOn4CLCty-inEMDV23fkecHoXUO0w9k9-A" alt="Data Science com Python">
+                    <h4>Data Science com Python</h4>
+                    <p>Aprenda a analisar e visualizar dados com Python.</p>
+                    <div class="details">
+                        <p><strong>Instrutor:</strong> Carlos Pereira</p>
+                        <p><strong>Duração:</strong> 80 horas</p>
+                    </div>
+                </div>
+                <div class="course-card" data-title="UI/UX Design" data-category="Codecamp">
+                    <img src="https://i.ytimg.com/vi/YniraoHEo-Q/hq720.jpg?sqp=-oaymwEcCNAFEJQDSFXyq4qpAw4IARUAAIhCGAFwAcABBg==&rs=AOn4CLB1JG8Lba5WxlrZw_ESPmozV83Wvg" alt="UI/UX Design">
+                    <h4>UI/UX Design</h4>
+                    <p>Desenvolva habilidades em design de interfaces e experiência do usuário.</p>
+                    <div class="details">
+                        <p><strong>Instrutor:</strong> Julia Lima</p>
+                        <p><strong>Duração:</strong> 30 horas</p>
+                    </div>
+                </div>
+                <div class="course-card" data-title="DevOps: Integração Contínua" data-category="Formação">
+                    <img src="https://i.ytimg.com/vi/5fQJC9iLCbE/hq720.jpg?sqp=-oaymwEcCNAFEJQDSFXyq4qpAw4IARUAAIhCGAFwAcABBg==&rs=AOn4CLDl-3MU51nibBTMFH5wrXKywsRxTQ" alt="DevOps: Integração Contínua">
+                    <h4>DevOps: Integração Contínua</h4>
+                    <p>Domine práticas de DevOps para melhorar a entrega de software.</p>
+                    <div class="details">
+                        <p><strong>Instrutor:</strong> Felipe Costa</p>
+                        <p><strong>Duração:</strong> 45 horas</p>
+                    </div>
+                </div>
+                <div class="course-card" data-title="Segurança da Informação" data-category="Formação">
+                    <img src="https://i.ytimg.com/vi/H2-fEbypIy8/hq720.jpg?sqp=-oaymwEcCNAFEJQDSFXyq4qpAw4IARUAAIhCGAFwAcABBg==&rs=AOn4CLC-dcmtEmicl4J4zzDyzyfgtuz4kg" alt="Segurança da Informação">
+                    <h4>Segurança da Informação</h4>
+                    <p>Aprenda sobre as melhores práticas de segurança em TI.</p>
+                    <div class="details">
+                        <p><strong>Instrutor:</strong> Roberta Almeida</p>
+                        <p><strong>Duração:</strong> 50 horas</p>
+                    </div>
+                </div>
+                <div class="course-card" data-title="Marketing Digial" data-category="Codecamp">
+                    <img src="https://i.ytimg.com/vi/GB_HaknBWe0/hq720.jpg?sqp=-oaymwEcCNAFEJQDSFXyq4qpAw4IARUAAIhCGAFwAcABBg==&rs=AOn4CLD6ZC1QfCIBz8dcemGQ1jgq1hasUw" alt="Marketing Digital">
+                    <h4>Marketing Digital</h4>
+                    <p>Desenvolva estratégias eficazes de marketing online.</p>
+                    <div class="details">
+                        <p><strong>Instrutor:</strong> Lucas Martins</p>
+                        <p><strong>Duração:</strong> 40 horas</p>
+                    </div>
+                </div>
+                <div class="course-card" data-title="Inteligência Artificial" data-category="Formação">
+                    <img src="https://i.ytimg.com/vi/nGTPXLhK80Q/hqdefault.jpg?sqp=-oaymwEXCNACELwBSFryq4qpAwkIARUAAIhCGAE=&rs=AOn4CLCkalJ7aGf6XedtbdhoM3h-DUBysg" alt="Inteligência Artificial">
+                    <h4>Inteligência Artificial</h4>
+                    <p>Explore os conceitos fundamentais de IA e machine learning.</p>
+                    <div class="details">
+                        <p><strong>Instrutor:</strong> Clara Rocha</p>
+                        <p><strong>Duração:</strong> 70 horas</p>
+                    </div>
+                </div>
+                <div class="course-card" data-title="Blockchain e Criptomoedas" data-category="Codecamp">
+                    <img src="https://i.ytimg.com/vi/jI1RQ71ACyw/hq720.jpg?sqp=-oaymwEcCNAFEJQDSFXyq4qpAw4IARUAAIhCGAFwAcABBg==&rs=AOn4CLBDyi_XENrZPoOxCgmgM1vT4KTU7g" alt="Blockchain e Criptomoedas">
+                    <h4>Blockchain e Criptomoedas</h4>
+                    <p>Entenda os fundamentos da tecnologia blockchain e seu uso.</p>
+                    <div class="details">
+                        <p><strong>Instrutor:</strong> Eduardo Dias</p>
+                        <p><strong>Duração:</strong> 50 horas</p>
+                    </div>
+                </div>
+                <div class="course-card" data-title="Análise de Dados com Excel" data-category="Formação">
+                    <img src="https://i.ytimg.com/vi/zvcBKMY4q78/hq720.jpg?sqp=-oaymwEcCNAFEJQDSFXyq4qpAw4IARUAAIhCGAFwAcABBg==&rs=AOn4CLBzzvQXTjybq2sjBivT7J0SrZ5XFg" alt="Análise de Dados com Excel">
+                    <h4>Análise de Dados com Excel</h4>
+                    <p>Aprenda a manipular e analisar dados utilizando Excel.</p>
+                    <div class="details">
+                        <p><strong>Instrutor:</strong> Mariana Souza</p>
+                        <p><strong>Duração:</strong> 30 horas</p>
+                    </div>
+                </div>
+                <div class="course-card" data-title="Programação em C++" data-category="Bootcamp">
+                    <img src="https://i.ytimg.com/vi/ZGy4jG_W7qw/hq720.jpg?sqp=-oaymwEcCNAFEJQDSFXyq4qpAw4IARUAAIhCGAFwAcABBg==&rs=AOn4CLDXN1ktZeBW5NqOTCuCmxejM3ce0Q" alt="Programação em C++">
+                    <h4>Programação em C++</h4>
+                    <p>Domine os conceitos básicos e avançados da programação em C++.</p>
+                    <div class="details">
+                        <p><strong>Instrutor:</strong> Rafael Gomes</p>
+                        <p><strong>Duração:</strong> 60 horas</p>
+                    </div>
+                </div>
+                <div class="course-card" data-title="Scrum e Metodologias Ágeis" data-category="Formação">
+                    <img src="https://i.ytimg.com/vi/HlmiVz0SqNQ/hq720.jpg?sqp=-oaymwEcCNAFEJQDSFXyq4qpAw4IARUAAIhCGAFwAcABBg==&rs=AOn4CLDJpJAe2v89ramdkXWU8sOsm7hvDA" alt="Scrum e Metodologias Ágeis">
+                    <h4>Scrum e Metodologias Ágeis</h4>
+                    <p>Aprenda a gerenciar projetos usando metodologias ágeis.</p>
+                    <div class="details">
+                        <p><strong>Instrutor:</strong> Bruno Nunes</p>
+                        <p><strong>Duração:</strong> 35 horas</p>
+                    </div>
+                </div>
+                <div class="course-card" data-title="Aprenda GIT" data-category="Bootcamp">
+                    <img src="https://i.ytimg.com/vi/EGmzAs1G0z0/hq720.jpg?sqp=-oaymwEcCNAFEJQDSFXyq4qpAw4IARUAAIhCGAFwAcABBg==&rs=AOn4CLBIbWKFdfAGkzaTY2IrLzUkwvANeg" alt="Design Gráfico">
+                    <h4>GIT</h4>
+                    <p>Bootcamp de GIT e Github.</p>
+                    <div class="details">
+                        <p><strong>Instrutor:</strong> Sônia Castro</p>
+                        <p><strong>Duração:</strong> 45 horas</p>
+                    </div>
+                </div>
+            </div>
+
+        <!-- Modal -->
+        <div id="courseModal" class="modal">
+            <div class="modal-content">
+                <span class="close" onclick="closeModal()">&times;</span>
+                <img id="courseImage" src="" alt="Imagem do Curso">
+                <h2 id="courseTitle"></h2>
+                <p id="courseDescription"></p>
+                <button onclick="confirmEnrollment()">Confirmar Matrícula</button>
+            </div>
+        </div>
+    </div>
+
+    
+
+    <script>
+        function filterCourses() {
+            const searchInput = document.getElementById("searchInput").value.toLowerCase();
+            const checkboxes = document.querySelectorAll(".filter-checkbox");
+            const courses = document.querySelectorAll(".course-card");
+
+            courses.forEach(course => {
+                const title = course.getAttribute("data-title").toLowerCase();
+                const category = course.getAttribute("data-category").toLowerCase();
+                const matchesSearch = title.includes(searchInput);
+                const matchesCheckbox = Array.from(checkboxes).some(checkbox => checkbox.checked && category.includes(checkbox.getAttribute("data-filter").toLowerCase()));
+                course.style.display = (matchesSearch && (Array.from(checkboxes).every(cb => !cb.checked) || matchesCheckbox)) ? "block" : "none";
+            });
+        }
+
+        function openModal(courseTitle, courseImage, courseDescription) {
+    document.getElementById('courseTitle').innerText = courseTitle;
+    document.getElementById('courseImage').src = courseImage;
+    document.getElementById('courseDescription').innerText = courseDescription;
+    document.getElementById('courseModal').style.display = 'flex';
+}
+
+
+        function closeModal() {
+            document.getElementById('courseModal').style.display = 'none';
+        }
+
+        document.querySelectorAll('.course-card').forEach(card => {
+            card.addEventListener('click', function () {
+                const title = this.getAttribute("data-title");
+                const imgSrc = this.querySelector("img").src;
+                const description = this.querySelector("p").textContent;
+                openModal(title, imgSrc, description);
+            });
+        });
+
+        document.getElementById("courseModal").addEventListener('click', function(event) {
+            if (event.target === this) {
+                closeModal();
+            }
+        });
+
+        document.querySelectorAll('.filter-checkbox').forEach(checkbox => {
+            checkbox.addEventListener('change', filterCourses);
+        });
+
+        document.getElementById('searchInput').addEventListener('keyup', filterCourses);
+
+        function openModal(courseTitle, courseImage, courseDescription) {
+        document.getElementById('courseImage').src = courseImage;
+        document.getElementById('courseTitle').innerText = courseTitle;
+        document.getElementById('courseDescription').innerText = courseDescription;
+    
+        const modal = document.getElementById('courseModal');
+        modal.style.display = 'flex';
+        modal.classList.add('fade-in');  // Classe de animação
+    }
+
+        
+
+    
+    </script>
+
+<script>
+    fetch('/api/courses')
+        .then(response => response.json())
+        .then(courses => {
+            const container = document.getElementById('courses-container');
+            courses.forEach(course => {
+                const courseElement = document.createElement('div');
+                courseElement.innerHTML = `
+                    <h2>${course.nome}</h2>
+                    <p>${course.descricao}</p>
+                    <img src="${course.imagem_url}" alt="${course.nome}">
+                    <p>Instrutor: ${course.instrutor}</p>
+                    <p>Duração: ${course.duracao} horas</p>
+                    <p>Categoria: ${course.categoria}</p>
+                `;
+                container.appendChild(courseElement);
+            });
+        })
+        .catch(error => console.error('Erro ao carregar cursos:', error));
+</script>
+<script>
+    async function loadCourses() {
+        const response = await fetch('/api/cursos');
+        const cursos = await response.json();
+        const coursesList = document.getElementById('coursesList');
+
+        cursos.forEach(curso => {
+            const courseCard = document.createElement('div');
+            courseCard.className = 'course-card';
+            courseCard.setAttribute('data-title', curso.titulo);
+            courseCard.setAttribute('data-category', curso.categoria);
+            courseCard.innerHTML = `
+                <img src="${curso.imagem}" alt="${curso.titulo}">
+                <h4>${curso.titulo}</h4>
+                <p>${curso.descricao}</p>
+                <div class="details">
+                    <p><strong>Instrutor:</strong> ${curso.instrutor}</p>
+                    <p><strong>Duração:</strong> ${curso.duracao} horas</p>
+                </div>
+            `;
+            coursesList.appendChild(courseCard);
+        });
+    }
+
+    loadCourses();
+</script>
+    </body>
+
+    </html>
