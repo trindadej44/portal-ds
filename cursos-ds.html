@@ -241,32 +241,54 @@
         }
 
         function openModal(curso) {
-            document.getElementById('modalTitle').textContent = curso.name;
-            document.getElementById('modalImage').src = curso.imagem_url;
-            document.getElementById('modalInstructor').textContent = `Instrutor: ${curso.instrutor}`;
-            document.getElementById('modalDuration').textContent = `Duração: ${curso.duracao} horas`;
-            document.getElementById('modalCategory').textContent = `Categoria: ${curso.categoria}`;
-            document.getElementById('modalDescription').textContent = curso.description;
+    document.getElementById('modalTitle').textContent = curso.name;
+    document.getElementById('modalImage').src = curso.imagem_url;
+    document.getElementById('modalInstructor').textContent = `Instrutor: ${curso.instrutor}`;
+    document.getElementById('modalDuration').textContent = `Duração: ${curso.duracao} horas`;
+    document.getElementById('modalCategory').textContent = `Categoria: ${curso.categoria}`;
+    document.getElementById('modalDescription').textContent = curso.description;
 
-            const modal = document.getElementById('courseModal');
-            modal.style.display = "block";
+    const modal = document.getElementById('courseModal');
+    modal.style.display = "block";
 
-            document.getElementById('closeModal').onclick = function() {
-                modal.style.display = "none";
-            };
+    document.getElementById('closeModal').onclick = function() {
+        modal.style.display = "none";
+    };
 
-            window.onclick = function(event) {
-                if (event.target === modal) {
-                    modal.style.display = "none";
-                }
-            };
-
-            document.getElementById('enrollButton').onclick = function() {
-                // Lógica para matrícula (pode ser uma requisição para o servidor)
-                alert(`Você se matriculou no curso: ${curso.name}`);
-                modal.style.display = "none";
-            };
+    window.onclick = function(event) {
+        if (event.target === modal) {
+            modal.style.display = "none";
         }
+    };
+
+    // Adicione o ID do curso à função de matrícula
+    document.getElementById('enrollButton').onclick = function() {
+        // Lógica para matrícula
+        const courseId = curso.id; // Aqui você deve pegar o ID do curso do objeto `curso`
+        fetch('http://localhost:3001/api/enroll', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ user_id: "1", course_id: courseId }) // Altere user_id conforme necessário
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.error) {
+                alert(data.error);
+            } else {
+                alert(data.message);
+            }
+            modal.style.display = "none"; // Fechar modal após matrícula
+        })
+        .catch(error => {
+            console.error('Erro ao realizar inscrição:', error);
+        });
+    };
+}
+
+
+
     </script>
 </body>
 </html>

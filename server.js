@@ -56,7 +56,7 @@ async (accessToken, refreshToken, profile, done) => {
 
     // Caso contrário, insira um novo usuário no banco de dados
     const newUser = await pool.query(
-      'INSERT INTO users (name, email, user_id) VALUES ($1, $2, $3) RETURNING *',
+      'INSERT INTO users (name, email, id) VALUES ($1, $2, $3) RETURNING *',
       [name, email, profile.id] // Usando o ID do perfil do Google
     );
 
@@ -68,11 +68,16 @@ async (accessToken, refreshToken, profile, done) => {
 }));
 
 passport.serializeUser((user, done) => {
-  done(null, user);
+  done(null, user.id); // Salva apenas o ID do usuário
 });
 
-passport.deserializeUser((user, done) => {
-  done(null, user);
+passport.deserializeUser(async (id, done) => {
+  try {
+    const user = await pool.query('SELECT * FROM users WHERE id = $1', [id]); // Aqui, você pode precisar mudar para a estrutura do seu banco
+    done(null, user.rows[0]);
+  } catch (error) {
+    done(error);
+  }
 });
 
 // Diretório comum
@@ -106,7 +111,6 @@ app.get('/dashboard', (req, res) => {
   }
 });
 
-
 // Rota inicial para renderizar index.html
 app.get('/', (req, res) => {
   const indexPath = path.join(commonDirectory, 'index.html');
@@ -127,9 +131,15 @@ app.listen(3001, () => {
   console.log('Servidor rodando na porta 3001');
 });
 
+// Rota de logout
 app.post('/logout', (req, res) => {
-  req.logOut(); // Usar logOut com "O" maiúsculo
-  res.redirect('/index.html'); // Redireciona para index.html
+  req.logout((err) => {
+    if (err) {
+      return res.status(500).json({ message: 'Erro ao fazer logout' });
+    }
+    res.clearCookie('connect.sid'); // Limpa o cookie da sessão
+    return res.status(200).json({ message: 'Logout bem-sucedido' });
+  });
 });
 
 // Rota para listar cursos disponíveis
@@ -152,5 +162,46 @@ app.get('/api/cursos', async (req, res) => {
   } catch (err) {
       console.error(err);
       res.status(500).send('Erro ao buscar cursos');
+  }
+});
+
+// Para obter o ID do usuário
+app.get('/enrolled-courses', async (req, res) => {
+  if (!req.isAuthenticated()) {
+    return res.status(401).json({ error: 'Usuário não autenticado' });
+  }
+
+  const userId = req.user.id; // Agora acessando o ID corretamente
+
+  try {
+    const enrolledCourses = await pool.query(
+      'SELECT courses.* FROM enrollments JOIN courses ON enrollments.course_id = courses.id WHERE enrollments.user_id = $1',
+      [userId]
+    );
+
+    res.json(enrolledCourses.rows); // Retorna os cursos inscritos
+  } catch (err) {
+    console.error('Erro ao buscar cursos inscritos:', err);
+    res.status(500).json({ error: 'Erro ao buscar cursos inscritos' });
+  }
+});
+
+// Rota para inscrever o usuário em um curso
+app.post('/api/enroll', async (req, res) => {
+  if (!req.isAuthenticated()) {
+    return res.status(401).json({ error: 'Usuário não autenticado' });
+  }
+
+  const userId = req.user.id; // Obtendo o ID do usuário logado
+  const { course_id } = req.body; // Obtém o ID do curso a partir do corpo da requisição
+
+  try {
+    const query = 'INSERT INTO enrollments (user_id, course_id) VALUES ($1, $2)';
+    await pool.query(query, [userId, course_id]); // Usando o ID do usuário logado
+
+    res.status(201).json({ message: 'Matrícula realizada com sucesso!' });
+  } catch (error) {
+    console.error('Erro ao salvar a matrícula:', error);
+    res.status(500).json({ error: 'Erro ao realizar matrícula.' });
   }
 });

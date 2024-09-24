@@ -81,23 +81,23 @@
             
         </li>
         <li>
-            <a href="cursos.html">
+            <a href="cursos-ds.html">
                 <i class="fa fa-film fa-2x"></i>
                 <span class="nav-text">
-                    Cursos Gravados
+                    Cursos Disponíveis
                 </span>
             </a>
         </li>
         <li>
-            <a href="#">
+            <a href="modulos.html">
                 <i class="fa fa-book fa-2x"></i>
                 <span class="nav-text">
-                   E-Books
+                   Acessar Módulos
                 </span>
             </a>
         </li>
         <li>
-           <a href="#">
+           <a href="config.html">
                <i class="fa fa-cogs fa-2x"></i>
                 <span class="nav-text">
                     Configurações e Ferramentas
@@ -113,7 +113,7 @@
             </a>
         </li>
         <li>
-            <a href="#">
+            <a href="https://github.com/trindadej44">
                <i class="fa fa-info fa-2x"></i>
                 <span class="nav-text">
                     Documentação
@@ -140,6 +140,11 @@
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.1/dist/umd/popper.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 <style>
+
+ body {
+            padding-left: 20px; /* Espaço à esquerda para a sidebar */
+            
+        }
 
 .carousel-item {
     height: 150px; /* Ajuste a altura para 300px */
@@ -231,117 +236,28 @@
     opacity: 0.8;
 }
 
-
-    @import url(//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css);
-    @import url(https://fonts.googleapis.com/css?family=Titillium+Web:300);
-    
-    .fa-2x {
-        font-size: 2em;
-    }
-    .fa {
-        position: relative;
-        display: table-cell;
-        width: 60px;
-        height: 36px;
-        text-align: center;
-        vertical-align: middle;
-        font-size: 20px;
-    }
-    
-    .main-menu:hover,nav.main-menu.expanded {
-        width:250px;
-        overflow:visible;
-    }
-    
-    .main-menu {
-        background:#212121;
-        border-right:1px solid #e5e5e5;
-        position:absolute;
-        top:0;
-        bottom:0;
-        height:100%;
-        left:0;
-        width:60px;
-        overflow:hidden;
-        -webkit-transition:width .05s linear;
-        transition:width .05s linear;
-        -webkit-transform:translateZ(0) scale(1,1);
-        z-index:1000;
-    }
-    
-    .main-menu>ul {
-        margin:7px 0;
-    }
-    
-    .main-menu li {
-        position:relative;
-        display:block;
-        width:250px;
-    }
-    
-    .main-menu li>a {
-        position:relative;
-        display:table;
-        border-collapse:collapse;
-        border-spacing:0;
-        color:#999;
-        font-family: arial;
-        font-size: 14px;
-        text-decoration:none;
-        -webkit-transform:translateZ(0) scale(1,1);
-        -webkit-transition:all .1s linear;
-        transition:all .1s linear;
-    }
-    
-    .main-menu .nav-icon {
-        position:relative;
-        display:table-cell;
-        width:60px;
-        height:36px;
-        text-align:center;
-        vertical-align:middle;
-        font-size:18px;
-    }
-    
-    .main-menu .nav-text {
-        position:relative;
-        display:table-cell;
-        vertical-align:middle;
-        width:190px;
-        font-family: 'Titillium Web', sans-serif;
-    }
-    
-    .main-menu>ul.logout {
-        position:absolute;
-        left:0;
-        bottom:0;
-    }
-    
-    .area {
-        float: left;
-        background: #e2e2e2;
-        width: 100%;
-        height: 100%;
-    }
-    
-    @font-face {
-        font-family: 'Titillium Web';
-        font-style: normal;
-        font-weight: 300;
-        src: local('Titillium WebLight'), local('TitilliumWeb-Light'), url(http://themes.googleusercontent.com/static/fonts/titilliumweb/v2/anMUvcNT0H1YN4FII8wpr24bNCNEoFTpS2BTjF6FB5E.woff) format('woff');
-    }
     </style>
     
+    <div class="container mt-5">
+        
+        <h2>Cursos Inscritos</h2>
+        <div id="courses-container" class="row">
+            <!-- Os cursos serão exibidos aqui -->
+        </div>
 
 </body>
 <script>
-    function logout() {
+   function logout() {
     fetch('/logout', {
         method: 'POST',
         credentials: 'include' // Para enviar cookies
     })
-    .then(() => {
-        window.location.href = '/'; // Redireciona para a página inicial
+    .then(response => {
+        if (response.ok) {
+            window.location.href = '/'; // Redireciona para a página inicial
+        } else {
+            console.error('Erro ao fazer logout:', response.statusText);
+        }
     })
     .catch(err => console.error('Erro ao fazer logout:', err));
 }
@@ -373,7 +289,7 @@ overflow:visible;
 .main-menu {
 background:#212121;
 border-right:1px solid #e5e5e5;
-position:absolute;
+position:fixed;
 top:0;
 bottom:0;
 height:100%;
@@ -481,4 +397,41 @@ height: 100%;
 
 
 </style>
+
+<script>
+     // Função para buscar os cursos inscritos
+     async function fetchEnrolledCourses() {
+            try {
+                const response = await fetch('http://localhost:3001/enrolled-courses');
+                const courses = await response.json();
+                
+                const coursesContainer = document.getElementById('courses-container');
+
+                // Cria um card para cada curso
+                courses.forEach(course => {
+                    const courseCard = document.createElement('div');
+                    courseCard.className = 'col-md-4 mb-4';
+                    courseCard.innerHTML = `
+                        <div class="card">
+                            <img src="${course.imagem_url}" class="card-img-top" alt="${course.name}">
+                            <div class="card-body">
+                                <h5 class="card-title">${course.name}</h5>
+                                <p class="card-text">${course.description}</p>
+                                <p class="card-text"><strong>Instrutor:</strong> ${course.instrutor}</p>
+                                <p class="card-text"><strong>Duração:</strong> ${course.duracao} horas</p>
+                                <p class="card-text"><strong>Categoria:</strong> ${course.categoria}</p>
+                            </div>
+                        </div>
+                    `;
+                    coursesContainer.appendChild(courseCard);
+                });
+            } catch (error) {
+                console.error('Erro ao buscar cursos:', error);
+            }
+        }
+
+        // Chama a função para buscar os cursos quando a página carrega
+        window.onload = fetchEnrolledCourses;
+</script>
+
 </html>
