@@ -113,6 +113,14 @@
             </a>
         </li>
         <li>
+            <a href="modulos.html">
+               <i class="fa fa-tasks fa-2x"></i>
+                <span class="nav-text">
+                    Modulos
+                </span>
+            </a>
+        </li>
+        <li>
             <a href="https://github.com/trindadej44">
                <i class="fa fa-info fa-2x"></i>
                 <span class="nav-text">
@@ -400,35 +408,37 @@ height: 100%;
 
 <script>
      // Função para buscar os cursos inscritos
-     async function fetchEnrolledCourses() {
-            try {
-                const response = await fetch('http://localhost:3001/enrolled-courses');
-                const courses = await response.json();
-                
-                const coursesContainer = document.getElementById('courses-container');
+async function fetchEnrolledCourses() {
+    try {
+        const response = await fetch('http://localhost:3001/enrolled-courses');
+        const courses = await response.json();
+        
+        const coursesContainer = document.getElementById('courses-container');
 
-                // Cria um card para cada curso
-                courses.forEach(course => {
-                    const courseCard = document.createElement('div');
-                    courseCard.className = 'col-md-4 mb-4';
-                    courseCard.innerHTML = `
-                        <div class="card">
-                            <img src="${course.imagem_url}" class="card-img-top" alt="${course.name}">
-                            <div class="card-body">
-                                <h5 class="card-title">${course.name}</h5>
-                                <p class="card-text">${course.description}</p>
-                                <p class="card-text"><strong>Instrutor:</strong> ${course.instrutor}</p>
-                                <p class="card-text"><strong>Duração:</strong> ${course.duracao} horas</p>
-                                <p class="card-text"><strong>Categoria:</strong> ${course.categoria}</p>
-                            </div>
-                        </div>
-                    `;
-                    coursesContainer.appendChild(courseCard);
-                });
-            } catch (error) {
-                console.error('Erro ao buscar cursos:', error);
-            }
-        }
+        // Cria um card para cada curso
+        courses.forEach(course => {
+            const courseCard = document.createElement('div');
+            courseCard.className = 'col-md-4 mb-4';
+            courseCard.innerHTML = `
+                <div class="card">
+                    <img src="${course.imagem_url}" class="card-img-top" alt="${course.name}">
+                    <div class="card-body">
+                        <h5 class="card-title">${course.name}</h5>
+                        <p class="card-text">${course.description}</p>
+                        <p class="card-text"><strong>Instrutor:</strong> ${course.instrutor}</p>
+                        <p class="card-text"><strong>Duração:</strong> ${course.duracao} horas</p>
+                        <p class="card-text"><strong>Categoria:</strong> ${course.categoria}</p>
+                        <a href="curso.html?id=${course.id}" class="btn btn-primary">Ver Conteúdo</a>
+                    </div>
+                </div>
+            `;
+            coursesContainer.appendChild(courseCard);
+        });
+    } catch (error) {
+        console.error('Erro ao buscar cursos:', error);
+    }
+}
+
 
         // Chama a função para buscar os cursos quando a página carrega
         window.onload = fetchEnrolledCourses;
