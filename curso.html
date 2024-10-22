@@ -180,6 +180,7 @@
             <p><strong>Instrutor:</strong> <span id="course-instructor"></span></p>
             <p><strong>Duração:</strong> <span id="course-duration"></span> minutos</p>
             <p><strong>Categoria:</strong> <span id="course-category"></span></p>
+            
         </div>
 
         <div class="questionario">
@@ -195,11 +196,12 @@
                 </div>
                 <button type="submit" class="btn btn-primary">Enviar</button>
             </form>
+            <iframe src="https://trinket.io/embed/python/9e5b548e6ede" width="100%" height="356" frameborder="0" marginwidth="0" marginheight="0" allowfullscreen></iframe>
         </div>
         
         <a href="dashboard.html" class="btn btn-secondary mt-4">Voltar</a>
     </div>
-
+    
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
@@ -231,53 +233,6 @@
                 console.error('Erro ao buscar conteúdo do curso:', error);
             }
         }
-
-        // Função para carregar o conteúdo do módulo
-        function loadModuleContent(moduleId) {
-            const moduleContents = {
-                1: {
-                    title: 'Introdução à Lógica de Programação',
-                    description: 'Neste módulo, abordamos os conceitos fundamentais da lógica de programação. Você aprenderá sobre variáveis, tipos de dados e estruturas básicas de controle.',
-                    questionario: 'Questionário da Introdução'
-                },
-                2: {
-                    title: 'Conceitos Básicos',
-                    description: 'Aqui, vamos discutir os princípios básicos da programação, como operadores, condicionais e loops. Entender esses conceitos é crucial para o desenvolvimento de qualquer aplicativo.',
-                    questionario: 'Questionário sobre Conceitos Básicos'
-                },
-                3: {
-                    title: 'Estruturas de Controle',
-                    description: 'As estruturas de controle permitem que você direcione o fluxo de execução do seu programa. Neste módulo, você aprenderá sobre if, else e switch.',
-                    questionario: 'Questionário sobre Estruturas de Controle'
-                },
-                4: {
-                    title: 'Funções e Métodos',
-                    description: 'Funções e métodos são essenciais para organizar seu código e reutilizar lógicas. Vamos aprender a criar e usar funções neste módulo.',
-                    questionario: 'Questionário sobre Funções e Métodos'
-                },
-                5: {
-                    title: 'Estruturas de Dados',
-                    description: 'Estruturas de dados são fundamentais para armazenar e manipular dados eficientemente. Neste módulo, você explorará arrays e objetos.',
-                    questionario: 'Questionário sobre Estruturas de Dados'
-                }
-            };
-
-            // Atualiza o conteúdo da área principal
-            const content = moduleContents[moduleId];
-            document.getElementById('course-title').innerText = content.title;
-            document.getElementById('course-description').innerText = content.description;
-            document.getElementById('questionario1').innerText = content.questionario;
-
-            // Limpar o formulário do questionário
-            document.getElementById('formQuestionario1').reset();
-        }
-
-        // Função para enviar o questionário
-        document.getElementById('formQuestionario1').addEventListener('submit', function(event) {
-            event.preventDefault();
-            alert('Questionário enviado com sucesso!');
-            // Aqui você pode adicionar a lógica para processar os dados do questionário
-        });
 
         // Chama a função para buscar o conteúdo quando a página carrega
         window.onload = function() {

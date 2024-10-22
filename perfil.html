@@ -87,24 +87,46 @@
             background-color: #e9eff5;
             color: #165eab;
         }
+        .loader {
+            display: none;
+            text-align: center;
+            margin-top: 20px;
+        }
+        .profile-image {
+            border-radius: 50%;
+            width: 100px;
+            height: 100px;
+            display: block;
+            margin: 0 auto;
+        }
     </style>
 </head>
 <body>
     <div id="profile-container">
         <button class="back-button" onclick="window.location.href='/dashboard'">Voltar</button>
         <h1>Meu Perfil</h1>
-
-        <div class="user-info" id="user-info">Carregando informações do usuário...</div>
         
+        <img id="profile-image" src="https://via.placeholder.com/100" alt="Imagem de Perfil" class="profile-image">
+        
+        <div class="loader" id="loader">Carregando...</div>
+        <div class="user-info" id="user-info" style="display:none;"></div>
+    
         <div class="phone-input-container" id="phone-input-container">
             <label class="label">Adicionar Telefone:</label>
             <input type="text" id="phone-input" placeholder="Digite seu telefone">
             <button id="save-phone">Salvar Telefone</button>
         </div>
         <div class="add-phone" id="add-phone">Adicionar Telefone</div>
+        
+        <div class="upload-container">
+            <label class="label">Adicionar Foto de Perfil:</label>
+            <input type="file" id="profile-input" accept="image/*">
+            <button id="upload-profile">Upload Foto</button>
+        </div>
     </div>
-
     <script>
+        document.getElementById('loader').style.display = 'block'; // Show loader
+
         fetch('http://localhost:3001/api/user-info')
             .then(response => {
                 if (!response.ok) {
@@ -113,7 +135,9 @@
                 return response.json();
             })
             .then(data => {
+                document.getElementById('loader').style.display = 'none'; // Hide loader
                 const userInfoElement = document.getElementById('user-info');
+                userInfoElement.style.display = 'block'; // Show user info
                 userInfoElement.innerHTML = `
                     <span class="label">Nome:</span> ${data.name}<br>
                     <span class="label">Email:</span> ${data.email}<br>
@@ -136,6 +160,7 @@
             })
             .catch(error => {
                 console.error('Houve um problema com a requisição:', error);
+                document.getElementById('loader').style.display = 'none'; // Hide loader
                 document.getElementById('user-info').innerHTML = 'Erro ao carregar informações.';
             });
 
@@ -162,6 +187,65 @@
                 });
             } else {
                 alert('Por favor, insira um telefone válido.');
+            }
+        });
+
+        // Função para carregar a foto de perfil
+        // Função para carregar a foto de perfil
+// Função para carregar a foto de perfil
+const loadProfilePicture = () => {
+    fetch('http://localhost:3001/api/user-info')
+        .then(response => response.json())
+        .then(data => {
+            const profileImageSrc = data.profile_picture ? `http://localhost:3001/${data.profile_picture}` : 'https://via.placeholder.com/100'; // Atualiza a imagem
+            document.getElementById('profile-image').src = profileImageSrc; // Atualiza a imagem
+        });
+};
+
+
+
+        // Chamando a função para carregar a imagem ao iniciar
+        loadProfilePicture();
+
+        document.getElementById('upload-profile').addEventListener('click', () => {
+            const fileInput = document.getElementById('profile-input');
+            const formData = new FormData();
+            const userId = 1; // Aqui você pode pegar o ID dinamicamente da resposta da API
+
+            if (fileInput.files.length > 0) {
+                const file = fileInput.files[0];
+
+                // Validação do tipo de imagem
+                if (!file.type.startsWith('image/')) {
+                    alert('Por favor, selecione um arquivo de imagem.');
+                    return;
+                }
+
+                formData.append('profilePicture', file);
+                formData.append('userId', userId);
+
+                fetch('http://localhost:3001/api/update-profile-picture', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Erro ao atualizar a foto de perfil');
+                    }
+                    // Exibe uma mensagem de sucesso
+                    const successMessage = document.createElement('div');
+                    successMessage.textContent = 'Foto de perfil atualizada com sucesso!';
+                    successMessage.style.color = 'green';
+                    successMessage.style.textAlign = 'center';
+                    document.getElementById('profile-container').prepend(successMessage);
+                    loadProfilePicture(); // Recarrega a imagem
+                })
+                .catch(error => {
+                    console.error('Erro:', error);
+                    alert('Falha ao atualizar a foto de perfil.');
+                });
+            } else {
+                alert('Por favor, selecione uma imagem.');
             }
         });
     </script>

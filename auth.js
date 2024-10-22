@@ -23,14 +23,16 @@ router.post('/register', async (req, res) => {
     [name, email, hashedPassword]
   );
 
-  // Autenticar o usuário
-  req.login(newUser.rows[0], (err) => {
-    if (err) {
-      return res.status(500).json({ error: 'Erro ao autenticar usuário' });
-    }
-    // Redirecionar para a dashboard após registro bem-sucedido
-    res.redirect('/cadastro.html');
-  });
+  // Criar sessão com informações do usuário
+  req.session.user = {
+    id: newUser.rows[0].id,
+    name: newUser.rows[0].name,
+    current_courses: newUser.rows[0].current_courses || [],
+    completed_courses: newUser.rows[0].completed_courses || []
+  };
+
+  // Redirecionar para a dashboard após registro bem-sucedido
+  res.redirect('/dashboard');
 });
 
 // Rota para login de usuário
