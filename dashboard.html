@@ -42,10 +42,10 @@
         </div>
       </div>
       <div class="carousel-item">
-        <img src="images/youtube_thumbnail_maxres (3).jpg" class="d-block w-100" alt="Ilustração 2">
+        <img src="images/ntecverso.gif" class="d-block w-100" alt="Ilustração 2">
       </div>
       <div class="carousel-item">
-        <img src="https://via.placeholder.com/800x400" class="d-block w-100" alt="Ilustração 3">
+        <img src="images/tecverso.gif" class="d-block w-100" alt="Ilustração 3">
       </div>
     </div>
     <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
@@ -75,11 +75,18 @@
             <a href="#">
                 <i class="fa fa-globe fa-2x"></i>
                 <span class="nav-text">
-                    Comunidade
+                    Trocar
                 </span>
             </a>
-            
         </li>
+        <li>
+            <a href="perfil.html">
+                 <i class="fa fa-user fa-2x"></i>
+                 <span class="nav-text">
+                     Perfil
+                 </span>
+             </a>
+         </li>
         <li>
             <a href="cursos-ds.html">
                 <i class="fa fa-film fa-2x"></i>
@@ -89,10 +96,10 @@
             </a>
         </li>
         <li>
-            <a href="modulos.html">
+            <a href="certificado.html">
                 <i class="fa fa-book fa-2x"></i>
                 <span class="nav-text">
-                   Acessar Módulos
+                   Certificado
                 </span>
             </a>
         </li>
@@ -105,18 +112,10 @@
             </a>
         </li>
         <li>
-           <a href="perfil.html">
-                <i class="fa fa-user fa-2x"></i>
-                <span class="nav-text">
-                    Perfil
-                </span>
-            </a>
-        </li>
-        <li>
             <a href="modulos.html">
-               <i class="fa fa-tasks fa-2x"></i>
+               <i class="fa fa-users fa-2x"></i>
                 <span class="nav-text">
-                    Modulos
+                    Comunidade
                 </span>
             </a>
         </li>
@@ -248,7 +247,7 @@
     
     <div class="container mt-5">
         
-        <h2>Cursos Inscritos</h2>
+        <h2>Seus cursos</h2>
         <div id="courses-container" class="row">
             <!-- Os cursos serão exibidos aqui -->
         </div>
@@ -411,34 +410,41 @@ height: 100%;
      
 
 
-async function fetchEnrolledCourses() {
+     async function fetchEnrolledCourses() {
     try {
         const response = await fetch('http://localhost:3001/enrolled-courses');
         const courses = await response.json();
         
         const coursesContainer = document.getElementById('courses-container');
+        coursesContainer.innerHTML = ''; // Limpa o container
 
-        // Cria um card para cada curso
-        courses.forEach(course => {
-            const courseCard = document.createElement('div');
-            courseCard.className = 'col-md-4 mb-4';
-            courseCard.innerHTML = `
-                <div class="card">
-                    <img src="${course.imagem_url}" class="card-img-top" alt="${course.name}">
-                    <div class="card-body">
-                        <h5 class="card-title">${course.name}</h5>
-                        <p class="card-text">${course.description}</p>
-                        <p class="card-text"><strong>Instrutor:</strong> ${course.instrutor}</p>
-                        <p class="card-text"><strong>Duração:</strong> ${course.duracao} horas</p>
-                        <p class="card-text"><strong>Categoria:</strong> ${course.categoria}</p>
-                        <a href="curso.html?id=${course.id}" class="btn btn-primary">Ver Conteúdo</a>
-                        
-
+        // Verifica se existem cursos
+        if (courses.length === 0) {
+            const noCoursesMessage = document.createElement('div');
+            noCoursesMessage.className = 'col-12 text-center'; // Adiciona classe para centralizar
+            noCoursesMessage.innerHTML = '<p>Ops, nenhum curso ainda</p>'; // Mensagem
+            coursesContainer.appendChild(noCoursesMessage);
+        } else {
+            // Cria um card para cada curso
+            courses.forEach(course => {
+                const courseCard = document.createElement('div');
+                courseCard.className = 'col-md-4 mb-4';
+                courseCard.innerHTML = `
+                    <div class="card">
+                        <img src="${course.imagem_url}" class="card-img-top" alt="${course.name}">
+                        <div class="card-body">
+                            <h5 class="card-title">${course.name}</h5>
+                            <p class="card-text">${course.description}</p>
+                            <p class="card-text"><strong>Instrutor:</strong> ${course.instrutor}</p>
+                            <p class="card-text"><strong>Duração:</strong> ${course.duracao} horas</p>
+                            <p class="card-text"><strong>Categoria:</strong> ${course.categoria}</p>
+                            <a href="curso.html?id=${course.id}" class="btn btn-primary">Ver Conteúdo</a>
+                        </div>
                     </div>
-                </div>
-            `;
-            coursesContainer.appendChild(courseCard);
-        });
+                `;
+                coursesContainer.appendChild(courseCard);
+            });
+        }
     } catch (error) {
         console.error('Erro ao buscar cursos:', error);
     }
