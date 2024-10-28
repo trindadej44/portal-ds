@@ -408,6 +408,9 @@ height: 100%;
 
 <script>
      // Função para buscar os cursos inscritos
+     
+
+
 async function fetchEnrolledCourses() {
     try {
         const response = await fetch('http://localhost:3001/enrolled-courses');
@@ -429,6 +432,8 @@ async function fetchEnrolledCourses() {
                         <p class="card-text"><strong>Duração:</strong> ${course.duracao} horas</p>
                         <p class="card-text"><strong>Categoria:</strong> ${course.categoria}</p>
                         <a href="curso.html?id=${course.id}" class="btn btn-primary">Ver Conteúdo</a>
+                        
+
                     </div>
                 </div>
             `;
@@ -443,5 +448,7 @@ async function fetchEnrolledCourses() {
         // Chama a função para buscar os cursos quando a página carrega
         window.onload = fetchEnrolledCourses;
 </script>
-
+<script>
+    
+</script>
 </html>

@@ -4,185 +4,284 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lista de Cursos</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
         body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f9;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f0f2f5;
             color: #333;
             margin: 0;
             padding: 0;
+            
         }
+
         header {
-            background-color: #0073e6;
+    background-image: url('images/EXPLORE um novo universo.gif'); /* Certifique-se de que o nome está correto */
+    background-size: cover;
+    background-position: center;
+    color: #fff;
+    padding: 20px;
+    text-align: center;
+    font-size: 24px;
+    letter-spacing: 1px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.dashboard-button {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background-color: transparent;
+            border: none;
             color: white;
-            padding: 20px;
-            text-align: center;
+            cursor: pointer;
+            font-size: 18px;
+            transition: color 0.3s ease;
         }
+
+        .dashboard-button:hover {
+            color: #ddd;
+        }
+
         .container {
             display: flex;
             flex-wrap: wrap;
-            justify-content: space-between;
             padding: 20px;
+            max-width: 1200px;
+            margin: auto;
+            gap: 20px;
         }
+
         .filter {
-            width: 20%;
+            flex: 1;
+            max-width: 250px;
             background-color: #fff;
             padding: 20px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            border-radius: 10px;
-            margin-right: 20px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            
         }
+
         .filter h2 {
-            margin-bottom: 20px;
+            margin-bottom: 15px;
+            font-size: 20px;
+            color: #4b78a4;
         }
-        .filter input[type="checkbox"] {
-            margin-right: 10px;
+
+        .filter input[type="text"] {
+            margin-bottom: 15px;
+            border-radius: 4px;
+            border: 1px solid #ddd;
+            padding: 10px;
+            width: calc(100% - 20px);
         }
+
         .filter label {
-            display: block;
+            display: flex;
+            align-items: center;
             margin-bottom: 10px;
             cursor: pointer;
         }
-        .filter input[type="text"] {
-            width: calc(100% - 20px);
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            margin-bottom: 20px;
+
+        .filter input[type="checkbox"] {
+            display: none;
         }
+
+        .custom-checkbox {
+            width: 20px;
+            height: 20px;
+            background-color: #fff;
+            border: 2px solid #4b78a4;
+            border-radius: 4px;
+            position: relative;
+            margin-right: 10px;
+            transition: background-color 0.2s ease, border-color 0.2s ease;
+        }
+
+        .filter input[type="checkbox"]:checked + .custom-checkbox {
+            background-color: #4b78a4;
+            border-color: #4b78a4;
+        }
+
+        .filter input[type="checkbox"]:checked + .custom-checkbox:after {
+            content: '';
+            position: absolute;
+            width: 6px;
+            height: 12px;
+            border: solid white;
+            border-width: 0 2px 2px 0;
+            transform: rotate(45deg);
+            left: 7px;
+            top: 3px;
+        }
+
         .courses {
-            width: 75%;
+            flex: 3;
             display: flex;
             flex-wrap: wrap;
-            justify-content: space-between;
+            gap: 20px;
         }
+
         .course-card {
-            width: 30%;
-            background-color: #fff;
-            margin-bottom: 20px;
+            flex: 1;
+            min-width: 250px;
+            max-width: 300px;
+            background-color: #ffffff;
             border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            overflow: hidden;
-            transition: transform 0.3s;
-            cursor: pointer;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+            transition: all 0.3s ease;
             text-align: center;
             padding: 15px;
+            overflow: hidden;
+            font-family: 'Poppins', sans-serif;
         }
+
         .course-card:hover {
-            transform: translateY(-5px);
+            transform: translateY(-8px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+            cursor: pointer;
         }
+
         .course-card img {
             width: 100%;
-            height: auto;
+            height: 160px;
             border-bottom: 1px solid #ddd;
+            border-radius: 10px 10px 0 0;
         }
+
         .course-card h4 {
-            margin: 15px 0 10px;
             font-size: 18px;
-            color: #0073e6;
+            margin: 15px 0 10px;
+            color: #7aa3cd;
+            font-weight: 600;
         }
+
         .course-card p {
-            margin: 0 0 10px;
-            color: #666;
             font-size: 14px;
+            color: #2e2e2e;
+            margin: 5px 0;
         }
-        .course-card .details {
-            font-size: 12px;
-            color: #999;
-        }
-        /* Estilo do modal */
+
         .modal {
             display: none;
             position: fixed;
-            z-index: 1;
-            left: 0;
+            z-index: 100;
             top: 0;
+            left: 0;
             width: 100%;
             height: 100%;
-            overflow: auto;
-            background-color: rgb(0,0,0);
-            background-color: rgba(0,0,0,0.4);
-            padding-top: 60px;
-        }
-        .modal-content {
-            background-color: #fefefe;
-            margin: 5% auto;
+            background: rgba(0, 0, 0, 0.7);
             padding: 20px;
-            border: 1px solid #888;
-            width: 80%;
-            max-width: 600px;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background-color: #fff;
+            padding: 20px;
             border-radius: 10px;
+            max-width: 600px;
+            width: 100%;
+            position: relative;
+            animation: modalFadeIn 0.4s;
         }
+
         .close {
-            color: #aaa;
-            float: right;
-            font-size: 28px;
-            font-weight: bold;
-        }
-        .close:hover,
-        .close:focus {
-            color: black;
-            text-decoration: none;
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            font-size: 24px;
+            color: #333;
             cursor: pointer;
         }
+
+        @keyframes modalFadeIn {
+            from {
+                transform: translateY(-20px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
         @media screen and (max-width: 768px) {
             .container {
                 flex-direction: column;
-                align-items: center;
+                gap: 15px;
             }
             .filter,
             .courses {
                 width: 100%;
             }
-            .course-card {
-                width: 48%;
-            }
         }
-        @media screen and (max-width: 480px) {
-            .course-card {
-                width: 100%;
-            }
+
+        #enrollButton {
+            background-color: #4b78a4; /* Cor do botão */
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
         }
+
+        #enrollButton:hover {
+            background-color: #3a607a; /* Cor ao passar o mouse */
+        }
+
     </style>
 </head>
 <body>
-    <header>
-        <h1>Lista de Cursos</h1>
+    <header style="background-image: url('images/EXPLORE um novo universo.gif'); background-size: cover; background-position: center; color: #fff; padding: 20px; text-align: center; font-size: 24px; letter-spacing: 1px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);">
+        <h1>‎</h1>
+        <button class="dashboard-button" onclick="window.location.href='dashboard.html'">
+            <i class="fas fa-sign-out-alt"></i> Voltar para o Dashboard
+        </button>
     </header>
+    
+
     <div class="container">
         <div class="filter">
-            <h2>Filtros</h2>
-            <input type="text" id="searchInput" placeholder="Pesquise..." onkeyup="filterCourses()">
-            <h3>Método de Aprendizagem</h3>
+            <h2>Filtrar Cursos</h2>
+            <input type="text" id="searchInput" placeholder="Pesquisar..." onkeyup="filterCourses()">
+            <h3>Tipo de Curso</h3>
             <label>
-                <input type="checkbox" class="filter-checkbox" data-filter="Bootcamp" onchange="filterCourses()"> Bootcamp
+                <input type="checkbox" class="filter-checkbox" data-filter="Bootcamp" onchange="filterCourses()"> 
+                <span class="custom-checkbox"></span> Bootcamp
             </label>
             <label>
-                <input type="checkbox" class="filter-checkbox" data-filter="Formação" onchange="filterCourses()"> Formação
+                <input type="checkbox" class="filter-checkbox" data-filter="Formação" onchange="filterCourses()"> 
+                <span class="custom-checkbox"></span> Formação
             </label>
             <label>
-                <input type="checkbox" class="filter-checkbox" data-filter="Codecamp" onchange="filterCourses()"> Codecamp
+                <input type="checkbox" class="filter-checkbox" data-filter="Codecamp" onchange="filterCourses()"> 
+                <span class="custom-checkbox"></span> Codecamp
             </label>
         </div>
-        <div class="courses" id="coursesList"></div>
+
+        <div class="courses" id="coursesList">
+            <!-- Conteúdo carregado dinamicamente -->
+        </div>
     </div>
 
-    <!-- Modal -->
     <div id="courseModal" class="modal">
         <div class="modal-content">
             <span class="close" id="closeModal">&times;</span>
             <h2 id="modalTitle"></h2>
-            <img id="modalImage" src="" alt="" style="width: 100%; height: auto; border-bottom: 1px solid #ddd;">
+            <img id="modalImage" src="" alt="" style="width: 100%; height: auto;">
             <p id="modalInstructor"></p>
             <p id="modalDuration"></p>
             <p id="modalCategory"></p>
             <p id="modalDescription"></p>
-            <button id="enrollButton">Matricular-se</button>
+            <button id="enrollButton" class="enroll-button">Matricular-se</button>
         </div>
     </div>
 
     <script>
-        fetch('http://localhost:3001/api/courses')
+         fetch('http://localhost:3001/api/courses')
             .then(response => {
                 if (!response.ok) {
                     throw new Error('Network response was not ok');
@@ -249,7 +348,7 @@
     document.getElementById('modalDescription').textContent = curso.description;
 
     const modal = document.getElementById('courseModal');
-    modal.style.display = "block";
+    modal.style.display = "flex"; // Mude para "flex"
 
     document.getElementById('closeModal').onclick = function() {
         modal.style.display = "none";
@@ -286,7 +385,6 @@
         });
     };
 }
-
 
 
     </script>

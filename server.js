@@ -12,6 +12,9 @@ const coursesRouter = require('./api/courses');
 const app = express();
 const multer = require('multer');
 const fs = require('fs');
+const router = express.Router();
+const db = require('./db');
+
 
 app.use('/api/courses', coursesRouter);
 // Configuração do bodyParser
@@ -58,9 +61,9 @@ async (accessToken, refreshToken, profile, done) => {
 
     // Caso contrário, insira um novo usuário no banco de dados
     const newUser = await pool.query(
-      'INSERT INTO users (name, email, id) VALUES ($1, $2, $3) RETURNING *',
-      [name, email, profile.id] // Usando o ID do perfil do Google
-    );
+      'INSERT INTO users (name, email, id, is_new_user) VALUES ($1, $2, $3, $4) RETURNING *',
+      [name, email, profile.id, true] // Atribui true inicialmente
+  );
 
     return done(null, newUser.rows[0]);
   } catch (error) {
@@ -387,3 +390,142 @@ app.get('/api/comments/:articleId', async (req, res) => {
     res.status(500).json({ error: 'Erro ao buscar comentários' });
   }
 });
+
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
+app.use('/api/ratings', router);
+
+app.post('/api/ratings', async (req, res) => {
+  const { course_id, rating } = req.body;
+  const userId = req.user.id; // Obtém o ID do usuário autenticado
+
+  try {
+    await pool.query(
+      'INSERT INTO ratings (course_id, user_id, rating) VALUES ($1, $2, $3)',
+      [course_id, userId, rating]
+    );
+    res.status(201).send('Avaliação adicionada com sucesso!');
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Erro ao adicionar avaliação');
+  }
+});
+
+app.get('/api/ratings/average/:course_id', async (req, res) => {
+  const { course_id } = req.params;
+  try {
+    const result = await pool.query(
+      'SELECT AVG(rating) as average_rating FROM ratings WHERE course_id = $1',
+      [course_id]
+    );
+    res.json(result.rows[0]); // Retorna a média de avaliações
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Erro ao buscar avaliações');
+  }
+});
+
+
+
+
+app.post('/welcome', (req, res) => {
+  const { age, position, education } = req.body;
+  const userId = req.user.id;
+
+  const query = `
+      UPDATE users 
+      SET age = $1, desired_position = $2, education = $3, is_new_user = FALSE 
+      WHERE id = $4
+  `;
+  pool.query(query, [age, position, education, userId], (err) => {
+      if (err) return res.status(500).send('Error updating user info');
+      res.redirect('/dashboard'); // Redireciona para o dashboard
+  });
+});
+
+
+app.get('/welcome', (req, res) => {
+  if (req.isAuthenticated() && req.user.is_new_user) { // Verifica se o usuário é novo
+    const welcomePath = path.join(commonDirectory, 'welcome.html'); // Rendeiriza um HTML com o formulário
+    res.sendFile(welcomePath);
+  } else {
+    res.redirect('/dashboard'); // Redireciona para o dashboard se o usuário não for novo
+  }
+});
+
+// Rota para salvar informações adicionais do usuário
+app.post('/api/users/additional-info', async (req, res) => {
+  if (!req.isAuthenticated()) {
+    return res.status(401).json({ error: 'Usuário não autenticado' });
+  }
+
+  const userId = req.user.id; // Obtém o ID do usuário autenticado
+  const { age, desiredRole, education } = req.body;
+
+  try {
+    const query = 'UPDATE users SET age = $1, desired_role = $2, education = $3, is_new_user = false WHERE id = $4';
+    await pool.query(query, [age, desiredRole, education, userId]);
+
+    res.status(200).json({ message: 'Informações adicionais salvas com sucesso!' });
+  } catch (error) {
+    console.error('Erro ao salvar informações adicionais:', error);
+    res.status(500).json({ error: 'Erro ao salvar informações adicionais.' });
+  }
+});
+
+app.get('/api/questions', async (req, res) => {
+  const { course_id } = req.query;
+  const result = await pool.query('SELECT * FROM questions WHERE course_id = $1', [course_id]);
+  res.json(result.rows);
+});
+
+app.post('/api/unenroll', async (req, res) => {
+  if (!req.isAuthenticated()) {
+    return res.status(401).json({ error: 'Usuário não autenticado' });
+  }
+
+  const userId = req.user.id; // Obtém o ID do usuário autenticado
+  const { course_id } = req.body; // Obtém o ID do curso a partir do corpo da requisição
+
+  try {
+    // Executa a query para remover a matrícula
+    const query = 'DELETE FROM enrollments WHERE user_id = $1 AND course_id = $2';
+    const result = await pool.query(query, [userId, course_id]);
+
+    // Verifica se a matrícula foi encontrada e removida
+    if (result.rowCount > 0) {
+      res.status(200).json({ message: 'Descadastro realizado com sucesso!' });
+    } else {
+      res.status(404).json({ error: 'Matrícula não encontrada.' });
+    }
+  } catch (error) {
+    console.error('Erro ao descadastrar:', error);
+    res.status(500).json({ error: 'Erro ao realizar descadastro.' });
+  }
+});
+
+// Rota para desmatricular o usuário de um curso
+app.delete('/api/enrollments/:course_id', async (req, res) => {
+  if (!req.isAuthenticated()) {
+    return res.status(401).json({ error: 'Usuário não autenticado' });
+  }
+
+  const userId = req.user.id; // Obtendo o ID do usuário logado
+  const courseId = req.params.course_id; // Obtendo o ID do curso a partir da URL
+
+  try {
+    // Remove o registro de matrícula do banco de dados
+    await pool.query(
+      'DELETE FROM enrollments WHERE user_id = $1 AND course_id = $2',
+      [userId, courseId]
+    );
+
+    res.status(200).json({ message: 'Desmatrícula realizada com sucesso!' });
+  } catch (error) {
+    console.error('Erro ao desmatricular do curso:', error);
+    res.status(500).json({ error: 'Erro ao desmatricular do curso' });
+  }
+});
+
+
+
