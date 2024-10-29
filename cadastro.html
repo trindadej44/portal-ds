@@ -4,19 +4,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script> <!-- Inclua o particles.js -->
 </head>
 <body>
+
+    <!-- Partículas no fundo -->
+    <div id="particles-js" style="position: absolute; width: 100%; height: 100%; z-index: -1;"></div>
 
     <div class="container" id="container">
         <div class="form-container sign-up-container">
             <form action="/auth/register" method="POST">
                 <h1>Criar conta</h1>
-                <div class="social-container">
-                    <a href="#" class="social"><i class="fab fa-facebook-f"></i></a>
-                    <a href="#" class="social"><i class="fab fa-google-plus-g"></i></a>
-                    <a href="#" class="social"><i class="fab fa-linkedin-in"></i></a>
-                </div>
-                <span>Ou use seu email</span>
+                <span>Use o seu melhor e-mail</span>
                 <input type="text" name="name" placeholder="Name" required />
                 <input type="email" name="email" placeholder="Email" required />
                 <input type="password" name="password" placeholder="Password" required />
@@ -27,12 +26,7 @@
         <div class="form-container sign-in-container">
             <form action="/auth/login" method="POST">
                 <h1>Entrar</h1>
-                <div class="social-container">
-                    <a href="#" class="social"><i class="fab fa-facebook-f"></i></a>
-                    <a href="#" class="social"><i class="fab fa-google-plus-g"></i></a>
-                    <a href="#" class="social"><i class="fab fa-linkedin-in"></i></a>
-                </div>
-                <span>Ou use sua conta</span>
+                <span>Insira seus dados</span>
                 <input type="email" name="email" placeholder="Email" required />
                 <input type="password" name="password" placeholder="Password" required />
                 <a href="#">Esqueceu a senha?</a>
@@ -42,20 +36,18 @@
         <div class="overlay-container">
             <div class="overlay">
                 <div class="overlay-panel overlay-left">
-                    <h1>Bem vindo de volta!</h1>
-                    <p>Para se manter conectado insira os seus dados para login</p>
-                    <button class="ghost" id="signIn">Sign In</button>
-                </div>
-                <div class="overlay-panel overlay-right">
                     <h1>Olá Estudante!</h1>
                     <p>Entre com seus dados pessoais para começar sua jornada</p>
-                    <button class="ghost" id="signUp">Cadastrar</button>
+                    <button class="ghost" id="signIn">Ou Entre</button>
+                </div>
+                <div class="overlay-panel overlay-right">
+                    <h1>Bem vindo de volta!</h1>
+                    <p>Para se manter conectado insira os seus dados para login</p>
+                    <button class="ghost" id="signUp">Ou cadastre-se</button>
                 </div>
             </div>
         </div>
     </div>
-    
-
 
 <style>
     
@@ -66,7 +58,7 @@
 }
 
 body {
-	background: #f6f5f7;
+	background-color: #1b0c36;
 	display: flex;
 	justify-content: center;
 	align-items: center;
@@ -106,8 +98,8 @@ a {
 
 button {
 	border-radius: 20px;
-	border: 1px solid #FF4B2B;
-	background-color: #FF4B2B;
+	border: 1px solid #3d39fc;
+	background-color: #472bff;
 	color: #FFFFFF;
 	font-size: 12px;
 	font-weight: bold;
@@ -220,9 +212,9 @@ input {
 }
 
 .overlay {
-	background: #FF416C;
-	background: -webkit-linear-gradient(to right, #FF4B2B, #FF416C);
-	background: linear-gradient(to right, #FF4B2B, #FF416C);
+	background: #012dbe;
+	background: -webkit-linear-gradient(to right, #2b67ff, #4157ff);
+	background: linear-gradient(to right, #2b3dff, #4441ff);
 	background-repeat: no-repeat;
 	background-size: cover;
 	background-position: 0 0;
@@ -324,6 +316,67 @@ signUpButton.addEventListener('click', () => {
 signInButton.addEventListener('click', () => {
 	container.classList.remove("right-panel-active");
 });
+
+particlesJS("particles-js", {
+        "particles": {
+            "number": {
+                "value": 130,
+                "density": {
+                    "enable": true,
+                    "value_area": 800
+                }
+            },
+            "color": { "value": "#ffffff" },
+            "shape": {
+                "type": "circle",
+                "stroke": { "width": 0, "color": "#000000" },
+                "polygon": { "nb_sides": 5 }
+            },
+            "opacity": {
+                "value": 0.5,
+                "random": false,
+                "anim": { "enable": false, "speed": 1, "opacity_min": 0.1, "sync": false }
+            },
+            "size": {
+                "value": 3,
+                "random": true,
+                "anim": { "enable": false, "speed": 40, "size_min": 0.1, "sync": false }
+            },
+            "line_linked": {
+                "enable": true,
+                "distance": 150,
+                "color": "#ffffff",
+                "opacity": 0.4,
+                "width": 1
+            },
+            "move": {
+                "enable": true,
+                "speed": 12,
+                "direction": "none",
+                "random": false,
+                "straight": false,
+                "out_mode": "out",
+                "bounce": false,
+                "attract": { "enable": false, "rotateX": 600, "rotateY": 1200 }
+            }
+        },
+        "interactivity": {
+            "detect_on": "canvas",
+            "events": {
+                "onhover": { "enable": true, "mode": "repulse" },
+                "onclick": { "enable": true, "mode": "push" },
+                "resize": true
+            },
+            "modes": {
+                "grab": { "distance": 400, "line_linked": { "opacity": 1 } },
+                "bubble": { "distance": 400, "size": 40, "duration": 2, "opacity": 8, "speed": 3 },
+                "repulse": { "distance": 200, "duration": 0.4 },
+                "push": { "particles_nb": 4 },
+                "remove": { "particles_nb": 2 }
+            }
+        },
+        "retina_detect": true
+    });
 </script>
 </body>
 </html>

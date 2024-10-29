@@ -210,7 +210,7 @@ const loadProfilePicture = () => {
         document.getElementById('upload-profile').addEventListener('click', () => {
             const fileInput = document.getElementById('profile-input');
             const formData = new FormData();
-            const userId = req.user.id; // Aqui você pode pegar o ID dinamicamente da resposta da API
+            const userId = 1; // Aqui você pode pegar o ID dinamicamente da resposta da API
 
             if (fileInput.files.length > 0) {
                 const file = fileInput.files[0];

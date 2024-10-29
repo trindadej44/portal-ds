@@ -71,14 +71,6 @@
             </a>
           
         </li>
-        <li class="has-subnav">
-            <a href="#">
-                <i class="fa fa-globe fa-2x"></i>
-                <span class="nav-text">
-                    Trocar
-                </span>
-            </a>
-        </li>
         <li>
             <a href="perfil.html">
                  <i class="fa fa-user fa-2x"></i>
@@ -419,12 +411,20 @@ height: 100%;
         coursesContainer.innerHTML = ''; // Limpa o container
 
         // Verifica se existem cursos
-        if (courses.length === 0) {
-            const noCoursesMessage = document.createElement('div');
-            noCoursesMessage.className = 'col-12 text-center'; // Adiciona classe para centralizar
-            noCoursesMessage.innerHTML = '<p>Ops, nenhum curso ainda</p>'; // Mensagem
-            coursesContainer.appendChild(noCoursesMessage);
-        } else {
+        // Verifica se existem cursos
+if (courses.length === 0) {
+    const noCoursesMessage = document.createElement('div');
+    noCoursesMessage.className = 'col-12 text-center'; // Adiciona classe para centralizar
+    noCoursesMessage.innerHTML = `
+        <h3>Ops, nenhum curso ainda!</h3>
+        <p>Você pode se matricular no menu ao lado esquerdo da sua tela, na opção "Cursos Disponíveis"
+        <br>
+        <img src="images/navee.gif" alt="Imagem informativa" class="img-fluid" style="max-width: 200px; margin-top: 10px;">
+    `; // Mensagem com a imagem
+    
+    coursesContainer.appendChild(noCoursesMessage);
+}
+ else {
             // Cria um card para cada curso
             courses.forEach(course => {
                 const courseCard = document.createElement('div');

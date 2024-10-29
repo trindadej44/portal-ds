@@ -36,6 +36,17 @@
             padding-left: 15px;
         }
 
+        .navbar a {
+    padding: 10px;
+    border-radius: 6px;
+    transition: background-color 0.3s;
+}
+
+.navbar a:hover {
+    background-color: rgba(255, 255, 255, 0.2); /* Leve destaque ao passar o mouse */
+}
+
+
         .container {
             max-width: 800px;
             margin: 20px auto;
@@ -155,10 +166,13 @@
 <body>
 
     <!-- Navbar -->
-    <div class="navbar">
-        <h1>Comunidade</h1>
-        <input type="text" placeholder="Buscar artigos...">
-    </div>
+    <!-- Navbar -->
+<div class="navbar">
+    <h1>Comunidade</h1>
+</div>
+<div style="padding: 10px 15px;">
+    <a href="/dashboard" style="color: #4267B2; text-decoration: none;">🔙 Voltar para o Dashboard</a>
+</div>
 
     <div class="container">
 
@@ -224,6 +238,7 @@
 
         articleDiv.innerHTML = `
             <h3>${article.title}</h3>
+            <p><strong>Autor:</strong> ${article.author_name}</p> <!-- Exibe o nome do autor -->
             <p>${article.content}</p>
             ${article.image_url ? `<img src="${article.image_url}" alt="Imagem do Artigo" />` : ''}
             <div class="likes-count">Curtidas: ${article.likes_count || 0}</div> <!-- Exibe o número de curtidas -->
@@ -240,7 +255,6 @@
         loadComments(article.id); // Carrega os comentários ao adicionar o artigo
     });
 }
-
 
 
 
