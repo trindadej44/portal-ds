@@ -338,23 +338,36 @@ app.get('/api/articles', async (req, res) => {
   }
 });
 
-
 app.post('/api/articles/:id/like', async (req, res) => {
-    const userId = req.user.id;
-    const articleId = req.params.id;
+  const userId = req.user.id;
+  const articleId = req.params.id;
 
-    try {
-        await pool.query(
-            'INSERT INTO likes (user_id, article_id) VALUES ($1, $2)',
-            [userId, articleId]
-        );
-        res.status(201).json({ message: 'Artigo curtido com sucesso!' });
-    } catch (error) {
-        console.error('Erro ao curtir artigo:', error);
-        res.status(500).json({ error: 'Erro ao curtir artigo' });
-    }
+  try {
+      // Verifica se o usuário já curtiu o artigo
+      const existingLike = await pool.query(
+          'SELECT * FROM likes WHERE user_id = $1 AND article_id = $2',
+          [userId, articleId]
+      );
+
+      console.log('Existing like:', existingLike.rows);
+
+      if (existingLike.rows.length > 0) {
+          return res.status(400).json({ error: 'Você já curtiu este artigo.' });
+      }
+
+      // Adiciona o novo like
+      await pool.query(
+          'INSERT INTO likes (user_id, article_id) VALUES ($1, $2)',
+          [userId, articleId]
+      );
+
+      console.log('Like adicionado:', { userId, articleId });
+      res.status(201).json({ message: 'Artigo curtido com sucesso!' });
+  } catch (error) {
+      console.error('Erro ao curtir artigo:', error);
+      res.status(500).json({ error: 'Erro ao curtir artigo' });
+  }
 });
-
 
 
 app.post('/api/comments', async (req, res) => {

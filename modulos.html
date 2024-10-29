@@ -237,19 +237,19 @@
         articleDiv.setAttribute('data-id', article.id);
 
         articleDiv.innerHTML = `
-            <h3>${article.title}</h3>
-            <p><strong>Autor:</strong> ${article.author_name}</p> <!-- Exibe o nome do autor -->
-            <p>${article.content}</p>
-            ${article.image_url ? `<img src="${article.image_url}" alt="Imagem do Artigo" />` : ''}
-            <div class="likes-count">Curtidas: ${article.likes_count || 0}</div> <!-- Exibe o número de curtidas -->
-            <button onclick="likeArticle(${article.id})">Curtir</button>
-            <button onclick="loadComments(${article.id})">Ver Comentários</button>
-            <div id="comments-${article.id}" class="comments-section"></div>
-            <div>
-                <input id="comment-input-${article.id}" placeholder="Deixe um comentário..." />
-                <button onclick="postComment(${article.id})">Postar</button>
-            </div>
-        `;
+    <h3>${article.title}</h3>
+    <p><strong>Autor:</strong> ${article.author_name}</p>
+    <p>${article.content}</p>
+    ${article.image_url ? `<img src="${article.image_url}" alt="Imagem do Artigo" />` : ''}
+    <div class="likes-count">Curtidas: ${article.like_count || 0}</div> <!-- Corrigido aqui -->
+    <button onclick="likeArticle(${article.id})">Curtir</button>
+    <button onclick="loadComments(${article.id})">Ver Comentários</button>
+    <div id="comments-${article.id}" class="comments-section"></div>
+    <div>
+        <input id="comment-input-${article.id}" placeholder="Deixe um comentário..." />
+        <button onclick="postComment(${article.id})">Postar</button>
+    </div>
+`;
         articlesList.appendChild(articleDiv);
 
         loadComments(article.id); // Carrega os comentários ao adicionar o artigo

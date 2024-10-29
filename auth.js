@@ -1,75 +1,100 @@
 const express = require('express');
 const bcrypt = require('bcryptjs');
-const pool = require('./db'); // Assumindo que você já configurou o pool de conexão
+const axios = require('axios'); // Para fazer requisições HTTP
+const pool = require('./db');
 const router = express.Router();
+
+const RECAPTCHA_SECRET_KEY = '6LeIxAcTAAAAAGG-vFI1TnRWxMZNFuojJ4WifJWe';
 
 // Rota para cadastrar usuário
 router.post('/register', async (req, res) => {
-  const { name, email, password } = req.body;
+  const { name, email, password, 'g-recaptcha-response': recaptchaResponse } = req.body;
+
+  // Verificação do reCAPTCHA
+  const recaptchaResult = await axios.post(`https://www.google.com/recaptcha/api/siteverify`, null, {
+      params: {
+          secret: RECAPTCHA_SECRET_KEY,
+          response: recaptchaResponse
+      }
+  });
+
+  if (!recaptchaResult.data.success) {
+      return res.status(400).json({ error: 'Falha na verificação do reCAPTCHA' });
+  }
 
   const userExists = await pool.query('SELECT * FROM users WHERE email = $1', [email]);
   if (userExists.rows.length > 0) {
-    return res.status(400).json({ error: 'Email já cadastrado' });
+      return res.status(400).json({ error: 'Email já cadastrado' });
   }
 
   const hashedPassword = await bcrypt.hash(password, 10);
   const newUser = await pool.query(
-    'INSERT INTO users (name, email, password, is_new_user) VALUES ($1, $2, $3, TRUE) RETURNING *',
-    [name, email, hashedPassword]
+      'INSERT INTO users (name, email, password, is_new_user) VALUES ($1, $2, $3, TRUE) RETURNING *',
+      [name, email, hashedPassword]
   );
 
   req.session.user = {
-    id: newUser.rows[0].id,
-    name: newUser.rows[0].name,
-    is_new_user: true,
-    current_courses: newUser.rows[0].current_courses || [],
-    completed_courses: newUser.rows[0].completed_courses || []
+      id: newUser.rows[0].id,
+      name: newUser.rows[0].name,
+      is_new_user: true,
+      current_courses: newUser.rows[0].current_courses || [],
+      completed_courses: newUser.rows[0].completed_courses || []
   };
 
   res.redirect('/dashboard');
 });
-
 // Rota para login de usuário
 // Rota para login de usuário
 router.post('/login', async (req, res) => {
-  const { email, password } = req.body;
+  const { email, password, 'g-recaptcha-response': recaptchaResponse } = req.body;
+
+  // Verificação do reCAPTCHA
+  const recaptchaResult = await axios.post(`https://www.google.com/recaptcha/api/siteverify`, null, {
+      params: {
+          secret: RECAPTCHA_SECRET_KEY,
+          response: recaptchaResponse
+      }
+  });
+
+  if (!recaptchaResult.data.success) {
+      return res.status(400).json({ error: 'Falha na verificação do reCAPTCHA' });
+  }
 
   // Verificar se o usuário existe
   const user = await pool.query('SELECT * FROM users WHERE email = $1', [email]);
   if (user.rows.length === 0) {
-    return res.status(400).json({ error: 'Usuário não encontrado' });
+      return res.status(400).json({ error: 'Usuário não encontrado' });
   }
 
   // Comparar a senha criptografada
   const validPassword = await bcrypt.compare(password, user.rows[0].password);
   if (!validPassword) {
-    return res.status(400).json({ error: 'Senha inválida' });
+      return res.status(400).json({ error: 'Senha inválida' });
   }
 
   // Autenticar o usuário
   req.login(user.rows[0], (err) => {
-    if (err) {
-      return res.status(500).json({ error: 'Erro ao autenticar usuário' });
-    }
+      if (err) {
+          return res.status(500).json({ error: 'Erro ao autenticar usuário' });
+      }
 
-    // Criar sessão com informações do usuário
-    req.session.user = {
-      id: user.rows[0].id,
-      name: user.rows[0].name,
-      current_courses: user.rows[0].current_courses || [],
-      completed_courses: user.rows[0].completed_courses || [],
-      isNewUser: user.rows[0].is_new_user // Armazena o estado de novo usuário
-    };
+      // Criar sessão com informações do usuário
+      req.session.user = {
+          id: user.rows[0].id,
+          name: user.rows[0].name,
+          current_courses: user.rows[0].current_courses || [],
+          completed_courses: user.rows[0].completed_courses || [],
+          isNewUser: user.rows[0].is_new_user
+      };
 
-    // Verificar se é o primeiro login
-    if (req.session.user.isNewUser) {
-      res.redirect('/welcome.html'); // Redireciona para a página de boas-vindas
-    } else {
-      res.redirect('/dashboard.html'); // Redireciona para a dashboard
-    }
+      // Verificar se é o primeiro login
+      if (req.session.user.isNewUser) {
+          res.redirect('/welcome.html');
+      } else {
+          res.redirect('/dashboard.html');
+      }
   });
 });
-
 
 // Rota para a página de boas-vindas
 router.get('/welcome', (req, res) => {

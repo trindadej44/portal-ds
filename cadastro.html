@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script> <!-- Inclua o particles.js -->
+	<script src="https://www.google.com/recaptcha/api.js" async defer></script>
 </head>
 <body>
 
@@ -21,6 +22,8 @@
                 <input type="password" name="password" placeholder="Password" required />
                 <br>
                 <button type="submit">Cadastrar</button>
+				<br>
+				<div class="g-recaptcha" data-sitekey="6Ldaw28qAAAAAGG1xmJpHBVI6EUrFDUBNIWNv_4z"></div>
             </form>
         </div>
         <div class="form-container sign-in-container">
@@ -31,6 +34,8 @@
                 <input type="password" name="password" placeholder="Password" required />
                 <a href="#">Esqueceu a senha?</a>
                 <button type="submit">Entrar</button>
+				<br>
+				<div class="g-recaptcha" data-sitekey="6Ldaw28qAAAAAGG1xmJpHBVI6EUrFDUBNIWNv_4z"></div>
             </form>
         </div>
         <div class="overlay-container">
@@ -48,7 +53,9 @@
             </div>
         </div>
     </div>
-
+	<script>
+		
+	</script>
 <style>
     
 @import url('https://fonts.googleapis.com/css?family=Montserrat:400,800');
@@ -305,22 +312,22 @@ footer a {
 </style>
 
 <script>
-    const signUpButton = document.getElementById('signUp');
-const signInButton = document.getElementById('signIn');
-const container = document.getElementById('container');
+     const signUpButton = document.getElementById('signUp');
+    const signInButton = document.getElementById('signIn');
+    const container = document.getElementById('container');
 
-signUpButton.addEventListener('click', () => {
-	container.classList.add("right-panel-active");
-});
+    signUpButton.addEventListener('click', () => {
+        container.classList.add("right-panel-active");
+    });
 
-signInButton.addEventListener('click', () => {
-	container.classList.remove("right-panel-active");
-});
+    signInButton.addEventListener('click', () => {
+        container.classList.remove("right-panel-active");
+    });
 
 particlesJS("particles-js", {
         "particles": {
             "number": {
-                "value": 130,
+                "value": 110,
                 "density": {
                     "enable": true,
                     "value_area": 800
@@ -351,7 +358,7 @@ particlesJS("particles-js", {
             },
             "move": {
                 "enable": true,
-                "speed": 12,
+                "speed": 3,
                 "direction": "none",
                 "random": false,
                 "straight": false,
