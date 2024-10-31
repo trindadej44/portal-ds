@@ -1,9 +1,10 @@
 const express = require('express');
 const bcrypt = require('bcryptjs');
+
 const axios = require('axios'); // Para fazer requisições HTTP
 const pool = require('./db');
 const router = express.Router();
-
+const app = express();
 const RECAPTCHA_SECRET_KEY = '6LeIxAcTAAAAAGG-vFI1TnRWxMZNFuojJ4WifJWe';
 
 // Rota para cadastrar usuário
@@ -152,4 +153,52 @@ router.get('/my-courses', async (req, res) => {
   }
 });
 
+router.get('/docente.html', (req, res) => {
+  res.sendFile(path.join(__dirname, 'docente.html'));
+});
+
+router.post('/teacher-login', async (req, res) => {
+  const { email, password, 'g-recaptcha-response': recaptchaResponse } = req.body;
+
+  // Verificação do reCAPTCHA
+  const recaptchaResult = await axios.post(`https://www.google.com/recaptcha/api/siteverify`, null, {
+      params: {
+          secret: RECAPTCHA_SECRET_KEY,
+          response: recaptchaResponse
+      }
+  });
+
+  if (!recaptchaResult.data.success) {
+      return res.status(400).json({ error: 'Falha na verificação do reCAPTCHA' });
+  }
+
+  try {
+      const userQuery = await pool.query('SELECT * FROM users WHERE email = $1', [email]);
+      const user = userQuery.rows[0];
+
+      if (!user) {
+          return res.status(401).json({ error: 'Usuário não encontrado' });
+      }
+
+      const isMatch = await bcrypt.compare(password, user.password);
+      if (!isMatch) {
+          return res.status(401).json({ error: 'Senha incorreta' });
+      }
+
+      // Criar sessão com informações do usuário
+      req.session.user = {
+          id: user.id,
+          name: user.name,
+          isNewUser: user.is_new_user,
+          current_courses: user.current_courses || [],
+          completed_courses: user.completed_courses || []
+      };
+
+      // Redireciona para o dashboard-prof.html após login bem-sucedido
+      res.redirect('/dashboard-prof.html'); 
+  } catch (error) {
+      console.error('Erro ao fazer login:', error);
+      res.status(500).json({ error: 'Erro interno do servidor' });
+  }
+});
 module.exports = router;

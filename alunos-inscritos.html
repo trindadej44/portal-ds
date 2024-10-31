@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <style>
+        /* Reset básico */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background-color: #f4f6f8;
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        #dashboard-container {
+            width: 80%;
+            max-width: 900px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+        }
+
+        h1 {
+            font-size: 24px;
+            margin-bottom: 20px;
+            text-align: center;
+            color: #4a90e2;
+        }
+
+        .user-card {
+            background-color: #f9fafb;
+            border: 1px solid #e0e4e8;
+            border-radius: 6px;
+            padding: 15px;
+            margin-bottom: 15px;
+        }
+
+        .user-card h3 {
+            font-size: 18px;
+            color: #333;
+        }
+
+        .user-card p {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .course-list {
+            list-style: none;
+            margin-top: 10px;
+        }
+
+        .course-list li {
+            padding: 5px 0;
+            font-size: 14px;
+            color: #555;
+        }
+    </style>
+</head>
+<body>
+    <div id="dashboard-container">
+        <h1>Dashboard de Usuários</h1>
+        <div id="user-list"></div>
+    </div>
+
+    <script>
+        async function loadDashboardData() {
+            try {
+                const response = await fetch('/api/dashboard-data');
+                const data = await response.json();
+                const userContainer = document.getElementById('user-list');
+                userContainer.innerHTML = ''; // Limpa o conteúdo anterior
+
+                data.forEach(user => {
+                    const userCard = document.createElement('div');
+                    userCard.className = 'user-card';
+
+                    userCard.innerHTML = `<h3>${user.user_name} (${user.user_email})</h3>`;
+
+                    if (user.courses.length > 0) {
+                        const coursesList = document.createElement('ul');
+                        coursesList.className = 'course-list';
+
+                        user.courses.forEach(course => {
+                            const courseItem = document.createElement('li');
+                            courseItem.innerText = course.course_name;
+                            coursesList.appendChild(courseItem);
+                        });
+
+                        userCard.appendChild(coursesList);
+                    } else {
+                        userCard.innerHTML += '<p>Não está matriculado em nenhum curso</p>';
+                    }
+
+                    userContainer.appendChild(userCard);
+                });
+            } catch (error) {
+                console.error('Erro ao carregar os dados do dashboard:', error);
+            }
+        }
+
+        // Chama a função quando a página carrega
+        document.addEventListener('DOMContentLoaded', loadDashboardData);
+    </script>
+</body>
+</html>

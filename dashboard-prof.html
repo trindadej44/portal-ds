@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <title>Dashboard Docente</title>
+    <style>
+        body {
+            display: flex;
+        }
+        .sidebar {
+            min-height: 100vh;
+            background-color: #343a40; /* Cor de fundo do sidebar */
+            color: white; /* Cor do texto */
+        }
+        .sidebar a {
+            color: white; /* Cor dos links */
+        }
+        .sidebar a:hover {
+            background-color: #495057; /* Cor ao passar o mouse */
+        }
+        .content {
+            padding: 20px; /* Espaçamento do conteúdo */
+        }
+    </style>
+</head>
+<body>
+
+    <div class="sidebar p-3">
+        <h2>Menu</h2>
+        <ul class="nav flex-column">
+            <li class="nav-item">
+                <a class="nav-link active" href="#">Início</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="alunos-inscritos.html">Alunos Inscritos</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="add-courses.html">Adicionar Curso</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#">Contato</a>
+            </li>
+        </ul>
+    </div>
+
+    <div class="content flex-fill p-3">
+        <h1>Bem-vindo!</h1>
+        <p>Este é o conteúdo principal da página.</p>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

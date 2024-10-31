@@ -92,6 +92,15 @@ const commonDirectory = path.join(__dirname);
 app.use('/auth', authRoutes);
 app.use('/api', userRoutes); 
 
+app.get('/courses/add', (req, res) => {
+  if (req.isAuthenticated()) {
+    const addCoursePath = path.join(commonDirectory, 'add_course.html');
+    res.sendFile(addCoursePath);
+  } else {
+    res.redirect('/');
+  }
+});
+
 // Rota de login com Google
 app.get('/auth/google', passport.authenticate('google', { scope: ['profile', 'email'] }));
 
@@ -540,5 +549,62 @@ app.delete('/api/enrollments/:course_id', async (req, res) => {
   }
 });
 
+// Rota para listar todos os alunos e os cursos em que estão inscritos
+app.get('/api/dashboard-data', async (req, res) => {
+  
+
+  try {
+    const result = await pool.query(`
+      SELECT u.id AS user_id, u.name AS user_name, u.email AS user_email, 
+             c.id AS course_id, c.name AS course_name
+      FROM users u
+      LEFT JOIN enrollments e ON u.id = e.user_id
+      LEFT JOIN courses c ON e.course_id = c.id
+      ORDER BY u.id, c.id
+    `);
+
+    // Organizar os dados no formato desejado
+    const usersWithCourses = result.rows.reduce((acc, row) => {
+      let user = acc.find(u => u.user_id === row.user_id);
+      if (!user) {
+        user = {
+          user_id: row.user_id,
+          user_name: row.user_name,
+          user_email: row.user_email,
+          courses: []
+        };
+        acc.push(user);
+      }
+      if (row.course_id) {
+        user.courses.push({
+          course_id: row.course_id,
+          course_name: row.course_name
+        });
+      }
+      return acc;
+    }, []);
+
+    res.json(usersWithCourses);
+  } catch (error) {
+    console.error('Erro ao buscar dados do dashboard:', error);
+    res.status(500).json({ error: 'Erro ao buscar dados do dashboard' });
+  }
+});
+
+app.post('/api/courses', async (req, res) => {
+  const { id, name, description, instrutor, duracao, categoria, imagem_url, video_url, video_url_basico, video_url_intermediario, video_url_avancado } = req.body;
+
+  try {
+      const result = await pool.query(
+          'INSERT INTO courses (id, name, description, instrutor, duracao, categoria, imagem_url, video_url, video_url_basico, video_url_intermediario, video_url_avancado) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11) RETURNING *',
+          [id, name, description, instrutor, duracao, categoria, imagem_url, video_url, video_url_basico, video_url_intermediario, video_url_avancado]
+      );
+
+      res.status(201).json(result.rows[0]); // Retorna o curso criado
+  } catch (error) {
+      console.error('Erro ao adicionar curso:', error);
+      res.status(500).json({ error: 'Erro ao adicionar curso.' });
+  }
+});
 
 
