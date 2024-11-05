@@ -5,9 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard Estudante</title>
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="dashboard.css" rel="stylesheet">
 </head>
 <body>
-    
+    <script src="dashboard.js" defer></script>
 <!-- Slider Bootstrap -->
 <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel" style="width: 80%; margin: auto; margin-top: 20px;">
     <ol class="carousel-indicators">
@@ -138,104 +139,7 @@
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.1/dist/umd/popper.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-<style>
 
- body {
-            padding-left: 20px; /* Espaço à esquerda para a sidebar */
-            
-        }
-
-.carousel-item {
-    height: 150px; /* Ajuste a altura para 300px */
-    transition: transform 0.2s ease, opacity 0.2s ease; /* Transição suave */
-    opacity: 0.7;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
-}
-
-.carousel-item.active {
-    transform: scale(1.05); /* Aumenta levemente o slide ativo */
-    opacity: 1; /* Mantém a opacidade */
-}
-
-.carousel-item-next,
-.carousel-item-prev {
-    position: absolute; /* Para permitir a movimentação lateral */
-    top: 0;
-    height: 300px; /* Altura do slide */
-    opacity: 0; /* Inicia invisível */
-}
-
-.carousel-item-next.active,
-.carousel-item-prev.active {
-    opacity: 1; /* Mostra o próximo ou anterior ao ativo */
-    transition: opacity 0.5s ease; /* Suaviza a opacidade */
-}
-
-.carousel-item-next {
-    transform: translateX(100%); /* Desloca para a direita */
-}
-
-.carousel-item-prev {
-    transform: translateX(-100%); /* Desloca para a esquerda */
-}
-
-.carousel-item-next.active {
-    transform: translateX(0); /* Retorna para a posição original */
-}
-
-.carousel-item-prev.active {
-    transform: translateX(0); /* Retorna para a posição original */
-}
-
-
-@media (max-width: 768px) {
-    .carousel-caption h5 {
-        font-size: 1.5rem; /* Reduzir tamanho do texto em dispositivos móveis */
-    }
-}
-
-
-.button.x {
-    position: absolute;
-    bottom: 20px; /* Distância do fundo */
-    right: 20px; /* Distância do lado direito */
-    max-width: 320px;
-    display: flex;
-    padding: 0.5rem 1.4rem;
-    font-size: 0.875rem;
-    line-height: 1.25rem;
-    font-weight: 700;
-    text-align: center;
-    text-transform: uppercase;
-    vertical-align: middle;
-    align-items: center;
-    border-radius: 0.5rem;
-    border: 1px solid rgba(86, 98, 246, 0.25);
-    gap: 0.75rem;
-    color: #ffffff;
-    background-color: #5662f6;
-    cursor: pointer;
-    transition: all 0.6s ease;
-    text-decoration: none;
-}
-
-.button.x:hover {
-    transform: scale(1.02);
-    background-color: rgb(119, 133, 204);
-    box-shadow: 0 2px 4px rgba(119, 133, 204, 0.1);
-}
-
-.button.x:focus {
-    outline: none;
-    box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.3);
-}
-
-.button.x:active {
-    transform: scale(0.98);
-    opacity: 0.8;
-}
-
-    </style>
     
     <script
                         id="ChatcubeScript"
@@ -248,221 +152,36 @@
     <div class="container mt-5">
         
         <h2>Seus cursos</h2>
-        <div id="courses-container" class="row">
+        <div id="courses-container" class="row fade-in">
             <!-- Os cursos serão exibidos aqui -->
         </div>
+        <!-- Botão para abrir o modal -->
+        <button id="open-modal-btn" class="btn open-todo-btn">To Do</button>
 
+        <div class="modal fade" id="todoModal" tabindex="-1" role="dialog" aria-labelledby="todoModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="todoModalLabel">Minha To-Do List</h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                  <ul id="task-list">
+                    <!-- Lista de tarefas será inserida aqui -->
+                  </ul>
+                  <input type="text" id="new-task" placeholder="Nova tarefa..." class="form-control mb-2">
+                  <button id="add-task-btn" class="btn btn-success btn-block">Adicionar Tarefa</button>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+                </div>
+              </div>
+            </div>
+          </div>
 </body>
-<script>
-   function logout() {
-    fetch('/logout', {
-        method: 'POST',
-        credentials: 'include' // Para enviar cookies
-    })
-    .then(response => {
-        if (response.ok) {
-            window.location.href = '/'; // Redireciona para a página inicial
-        } else {
-            console.error('Erro ao fazer logout:', response.statusText);
-        }
-    })
-    .catch(err => console.error('Erro ao fazer logout:', err));
-}
-
-    </script>
-<style>
-@import url(//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css);
-
-@import url(https://fonts.googleapis.com/css?family=Titillium+Web:300);
-.fa-2x {
-font-size: 2em;
-}
-.fa {
-position: relative;
-display: table-cell;
-width: 60px;
-height: 36px;
-text-align: center;
-vertical-align: middle;
-font-size:20px;
-}
-
-
-.main-menu:hover,nav.main-menu.expanded {
-width:250px;
-overflow:visible;
-}
-
-.main-menu {
-background:#3f3d3d;
-border-right:1px solid #e5e5e5;
-position:fixed;
-top:0;
-bottom:0;
-height:100%;
-left:0;
-width:60px;
-overflow:hidden;
--webkit-transition:width .05s linear;
-transition:width .05s linear;
--webkit-transform:translateZ(0) scale(1,1);
-z-index:1000;
-}
-
-.main-menu>ul {
-margin:7px 0;
-}
-
-.main-menu li {
-position:relative;
-display:block;
-width:250px;
-}
-
-.main-menu li>a {
-position:relative;
-display:table;
-border-collapse:collapse;
-border-spacing:0;
-color:#999;
- font-family: arial;
-font-size: 14px;
-text-decoration:none;
--webkit-transform:translateZ(0) scale(1,1);
--webkit-transition:all .1s linear;
-transition:all .1s linear;
-  
-}
-
-.main-menu .nav-icon {
-position:relative;
-display:table-cell;
-width:60px;
-height:36px;
-text-align:center;
-vertical-align:middle;
-font-size:18px;
-}
-
-.main-menu .nav-text {
-position:relative;
-display:table-cell;
-vertical-align:middle;
-width:190px;
-  font-family: 'Titillium Web', sans-serif;
-}
-
-.main-menu>ul.logout {
-position:absolute;
-left:0;
-bottom:0;
-}
-
-.no-touch .scrollable.hover {
-overflow-y:hidden;
-}
-
-.no-touch .scrollable.hover:hover {
-overflow-y:auto;
-overflow:visible;
-}
-
-a:hover,a:focus {
-text-decoration:none;
-}
-
-nav {
--webkit-user-select:none;
--moz-user-select:none;
--ms-user-select:none;
--o-user-select:none;
-user-select:none;
-}
-
-nav ul,nav li {
-outline:0;
-margin:0;
-padding:0;
-}
-.main-menu li:hover>a,nav.main-menu li.active>a,.dropdown-menu>li>a:hover,.dropdown-menu>li>a:focus,.dropdown-menu>.active>a,.dropdown-menu>.active>a:hover,.dropdown-menu>.active>a:focus,.no-touch .dashboard-page nav.dashboard-menu ul li:hover a,.dashboard-page nav.dashboard-menu ul li.active a {
-color:#fff;
-background-color:#000000;
-}
-.area {
-float: left;
-background: #e2e2e2;
-width: 100%;
-height: 100%;
-}
-@font-face {
-  font-family: 'Titillium Web';
-  font-style: normal;
-  font-weight: 300;
-  src: local('Titillium WebLight'), local('TitilliumWeb-Light'), url(http://themes.googleusercontent.com/static/fonts/titilliumweb/v2/anMUvcNT0H1YN4FII8wpr24bNCNEoFTpS2BTjF6FB5E.woff) format('woff');
-}
 
 
 
-</style>
-
-<script>
-     // Função para buscar os cursos inscritos
-     
-
-
-     async function fetchEnrolledCourses() {
-    try {
-        const response = await fetch('http://localhost:3001/enrolled-courses');
-        const courses = await response.json();
-        
-        const coursesContainer = document.getElementById('courses-container');
-        coursesContainer.innerHTML = ''; // Limpa o container
-
-        // Verifica se existem cursos
-        // Verifica se existem cursos
-if (courses.length === 0) {
-    const noCoursesMessage = document.createElement('div');
-    noCoursesMessage.className = 'col-12 text-center'; // Adiciona classe para centralizar
-    noCoursesMessage.innerHTML = `
-        <h3>Ops, nenhum curso ainda!</h3>
-        <p>Você pode se matricular no menu ao lado esquerdo da sua tela, na opção "Cursos Disponíveis"
-        <br>
-        <img src="images/navee.gif" alt="Imagem informativa" class="img-fluid" style="max-width: 200px; margin-top: 10px;">
-    `; // Mensagem com a imagem
-    
-    coursesContainer.appendChild(noCoursesMessage);
-}
- else {
-            // Cria um card para cada curso
-            courses.forEach(course => {
-                const courseCard = document.createElement('div');
-                courseCard.className = 'col-md-4 mb-4';
-                courseCard.innerHTML = `
-                    <div class="card">
-                        <img src="${course.imagem_url}" class="card-img-top" alt="${course.name}">
-                        <div class="card-body">
-                            <h5 class="card-title">${course.name}</h5>
-                            <p class="card-text">${course.description}</p>
-                            <p class="card-text"><strong>Instrutor:</strong> ${course.instrutor}</p>
-                            <p class="card-text"><strong>Duração:</strong> ${course.duracao} horas</p>
-                            <p class="card-text"><strong>Categoria:</strong> ${course.categoria}</p>
-                            <a href="curso.html?id=${course.id}" class="btn btn-primary">Ver Conteúdo</a>
-                        </div>
-                    </div>
-                `;
-                coursesContainer.appendChild(courseCard);
-            });
-        }
-    } catch (error) {
-        console.error('Erro ao buscar cursos:', error);
-    }
-}
-
-
-        // Chama a função para buscar os cursos quando a página carrega
-        window.onload = fetchEnrolledCourses;
-</script>
-<script>
-    
-</script>
 </html>

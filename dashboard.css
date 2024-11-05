@@ -1,0 +1,401 @@
+
+@import url(//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css);
+
+@import url(https://fonts.googleapis.com/css?family=Titillium+Web:300);
+.fa-2x {
+font-size: 2em;
+}
+.fa {
+position: relative;
+display: table-cell;
+width: 60px;
+height: 36px;
+text-align: center;
+vertical-align: middle;
+font-size:20px;
+}
+
+
+.main-menu:hover,nav.main-menu.expanded {
+width:250px;
+overflow:visible;
+}
+
+.main-menu {
+background:#3f3d3d;
+border-right:1px solid #e5e5e5;
+position:fixed;
+top:0;
+bottom:0;
+height:100%;
+left:0;
+width:60px;
+overflow:hidden;
+-webkit-transition:width .05s linear;
+transition:width .05s linear;
+-webkit-transform:translateZ(0) scale(1,1);
+z-index:1000;
+}
+
+.main-menu>ul {
+margin:7px 0;
+}
+
+.main-menu li {
+position:relative;
+display:block;
+width:250px;
+}
+
+.main-menu li>a {
+position:relative;
+display:table;
+border-collapse:collapse;
+border-spacing:0;
+color:#999;
+ font-family: arial;
+font-size: 14px;
+text-decoration:none;
+-webkit-transform:translateZ(0) scale(1,1);
+-webkit-transition:all .1s linear;
+transition:all .1s linear;
+  
+}
+
+.main-menu .nav-icon {
+position:relative;
+display:table-cell;
+width:60px;
+height:36px;
+text-align:center;
+vertical-align:middle;
+font-size:18px;
+}
+
+.main-menu .nav-text {
+position:relative;
+display:table-cell;
+vertical-align:middle;
+width:190px;
+  font-family: 'Titillium Web', sans-serif;
+}
+
+.main-menu>ul.logout {
+position:absolute;
+left:0;
+bottom:0;
+}
+
+.no-touch .scrollable.hover {
+overflow-y:hidden;
+}
+
+.no-touch .scrollable.hover:hover {
+overflow-y:auto;
+overflow:visible;
+}
+
+a:hover,a:focus {
+text-decoration:none;
+}
+
+nav {
+-webkit-user-select:none;
+-moz-user-select:none;
+-ms-user-select:none;
+-o-user-select:none;
+user-select:none;
+}
+
+nav ul,nav li {
+outline:0;
+margin:0;
+padding:0;
+}
+.main-menu li:hover>a,nav.main-menu li.active>a,.dropdown-menu>li>a:hover,.dropdown-menu>li>a:focus,.dropdown-menu>.active>a,.dropdown-menu>.active>a:hover,.dropdown-menu>.active>a:focus,.no-touch .dashboard-page nav.dashboard-menu ul li:hover a,.dashboard-page nav.dashboard-menu ul li.active a {
+color:#fff;
+background-color:#000000;
+}
+.area {
+float: left;
+background: #e2e2e2;
+width: 100%;
+height: 100%;
+}
+@font-face {
+  font-family: 'Titillium Web';
+  font-style: normal;
+  font-weight: 300;
+  src: local('Titillium WebLight'), local('TitilliumWeb-Light'), url(http://themes.googleusercontent.com/static/fonts/titilliumweb/v2/anMUvcNT0H1YN4FII8wpr24bNCNEoFTpS2BTjF6FB5E.woff) format('woff');
+}
+
+.open-todo-btn {
+    position: fixed;
+    bottom: 26px; /* altura suficiente acima do widget */
+    right: 100px;
+    background-color: #000000;
+    color: white;
+    font-weight: bold;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 25px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s ease, background-color 0.3s ease;
+    cursor: pointer;
+    z-index: 1000;
+}
+
+.open-todo-btn::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 300%;
+    height: 300%;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.2), transparent);
+    transform: translate(-50%, -50%) scale(0);
+    transition: transform 0.5s ease;
+}
+
+.open-todo-btn:hover {
+    background-color: #3a56cc;
+    box-shadow: 0 6px 12px rgba(58, 86, 204, 0.4);
+}
+
+.open-todo-btn:hover::before {
+    transform: translate(-50%, -50%) scale(1);
+}
+
+.open-todo-btn:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(78, 115, 223, 0.5);
+}
+
+
+ body {
+            padding-left: 20px; /* Espaço à esquerda para a sidebar */
+            
+        }
+
+.carousel-item {
+    height: 150px; /* Ajuste a altura para 300px */
+    transition: transform 0.2s ease, opacity 0.2s ease; /* Transição suave */
+    opacity: 0.7;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+}
+
+.carousel-item.active {
+    transform: scale(1.05); /* Aumenta levemente o slide ativo */
+    opacity: 1; /* Mantém a opacidade */
+}
+
+.carousel-item-next,
+.carousel-item-prev {
+    position: absolute; /* Para permitir a movimentação lateral */
+    top: 0;
+    height: 300px; /* Altura do slide */
+    opacity: 0; /* Inicia invisível */
+}
+
+.carousel-item-next.active,
+.carousel-item-prev.active {
+    opacity: 1; /* Mostra o próximo ou anterior ao ativo */
+    transition: opacity 0.5s ease; /* Suaviza a opacidade */
+}
+
+.carousel-item-next {
+    transform: translateX(100%); /* Desloca para a direita */
+}
+
+.carousel-item-prev {
+    transform: translateX(-100%); /* Desloca para a esquerda */
+}
+
+.carousel-item-next.active {
+    transform: translateX(0); /* Retorna para a posição original */
+}
+
+.carousel-item-prev.active {
+    transform: translateX(0); /* Retorna para a posição original */
+}
+
+
+@media (max-width: 768px) {
+    .carousel-caption h5 {
+        font-size: 1.5rem; /* Reduzir tamanho do texto em dispositivos móveis */
+    }
+}
+
+
+.button.x {
+    position: absolute;
+    bottom: 20px; /* Distância do fundo */
+    right: 20px; /* Distância do lado direito */
+    max-width: 320px;
+    display: flex;
+    padding: 0.5rem 1.4rem;
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+    font-weight: 700;
+    text-align: center;
+    text-transform: uppercase;
+    vertical-align: middle;
+    align-items: center;
+    border-radius: 0.5rem;
+    border: 1px solid rgba(86, 98, 246, 0.25);
+    gap: 0.75rem;
+    color: #ffffff;
+    background-color: #5662f6;
+    cursor: pointer;
+    transition: all 0.6s ease;
+    text-decoration: none;
+}
+
+.button.x:hover {
+    transform: scale(1.02);
+    background-color: rgb(119, 133, 204);
+    box-shadow: 0 2px 4px rgba(119, 133, 204, 0.1);
+}
+
+.button.x:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.3);
+}
+
+.button.x:active {
+    transform: scale(0.98);
+    opacity: 0.8;
+}
+
+#todo-list {
+            max-width: 500px;
+            margin: 0 auto;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+        }
+
+        h2 {
+            text-align: center;
+            color: #4e73df;
+            margin-bottom: 20px;
+        }
+
+        #task-list {
+            list-style-type: none;
+            padding-left: 0;
+        }
+
+        #task-list li {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #f8f9fc;
+            padding: 12px 15px;
+            margin-bottom: 10px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            transition: background-color 0.3s, transform 0.3s;
+        }
+
+        #task-list li:hover {
+            background-color: #f0f4f8;
+            transform: scale(1.02);
+        }
+
+        #task-list li.completed {
+            background-color: #d1e7dd;
+            text-decoration: line-through;
+        }
+
+        #task-list li button {
+            background-color: transparent;
+            border: none;
+            color: #6c757d;
+            font-size: 18px;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+
+        #task-list li button:hover {
+            color: #495057;
+        }
+
+        .task-input-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        #new-task {
+            width: 80%;
+            padding: 10px;
+            border: 1px solid #ced4da;
+            border-radius: 4px;
+            margin-right: 10px;
+            font-size: 16px;
+        }
+
+        #add-task-btn {
+            padding: 10px 20px;
+            background-color: #4e73df;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+
+        #add-task-btn:hover {
+            background-color: #3a56cc;
+        }
+
+        @media (max-width: 768px) {
+            #todo-list {
+                width: 90%;
+            }
+
+            #new-task {
+                width: 70%;
+            }
+
+            #add-task-btn {
+                width: 25%;
+            }
+        }
+
+        /* Estilos adicionais para a To-Do List dentro do Modal */
+#todoModal .modal-body {
+    max-height: 400px;
+    overflow-y: auto; /* Para rolar as tarefas, se necessário */
+}
+
+#todoModal ul {
+    list-style: none;
+    padding-left: 0;
+}
+
+#todoModal ul li {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 0;
+    border-bottom: 1px solid #ddd;
+}
+
+#todoModal ul li button {
+    margin-left: 10px;
+}
+
+
+/* dashboard.css */
+.fade-in {
+    opacity: 0;
+    transition: opacity 2s ease-in-out;
+}
+
+.fade-in.show {
+    opacity: 1;
+}
