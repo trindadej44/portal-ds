@@ -97,69 +97,75 @@ $('#todoModal').on('show.bs.modal', loadTasks); // Quando o modal abrir, carrega
      
 
 
-     async function fetchEnrolledCourses() {
-        try {
-            const response = await fetch('http://localhost:3001/enrolled-courses');
-            const courses = await response.json();
-            
-            const coursesContainer = document.getElementById('courses-container');
-            coursesContainer.innerHTML = ''; // Limpa o container
-    
-            // Verifica se existem cursos
-            if (courses.length === 0) {
-                const noCoursesMessage = document.createElement('div');
-                noCoursesMessage.className = 'col-12 text-center'; // Adiciona classe para centralizar
-                noCoursesMessage.innerHTML = `
-                    <h3>Ops, nenhum curso ainda!</h3>
-                    <p>Você pode se matricular no menu ao lado esquerdo da sua tela, na opção "Cursos Disponíveis"</p>
-                    <br>
-                    <img src="images/navee.gif" alt="Imagem informativa" class="img-fluid" style="max-width: 200px; margin-top: 10px;">
-                `; // Mensagem com a imagem
+     // Create star background
+        function createStars() {
+            const spaceBackground = document.getElementById('space-bg');
+            const numberOfStars = 100;
+
+            for (let i = 0; i < numberOfStars; i++) {
+                const star = document.createElement('div');
+                star.className = 'star';
+                star.style.left = `${Math.random() * 100}%`;
+                star.style.top = `${Math.random() * 100}%`;
+                star.style.animationDelay = `${Math.random() * 2}s`;
+                spaceBackground.appendChild(star);
+            }
+        }
+
+        // Modified fetchEnrolledCourses function
+        async function fetchEnrolledCourses() {
+            try {
+                const response = await fetch('http://localhost:3001/enrolled-courses');
+                const courses = await response.json();
                 
-                coursesContainer.appendChild(noCoursesMessage);
-            } else {
-                // Cria um card para cada curso
-                courses.forEach(course => {
-                    const courseCard = document.createElement('div');
-                    courseCard.className = 'col-md-4 mb-4';
-                    courseCard.innerHTML = `
-                        <div class="card">
-                            <img src="${course.imagem_url}" class="card-img-top" alt="${course.name}">
-                            <div class="card-body">
-                                <h5 class="card-title">${course.name}</h5>
-                                <p class="card-text">${course.description}</p>
-                                <p class="card-text"><strong>Instrutor:</strong> ${course.instrutor}</p>
-                                <p class="card-text"><strong>Duração:</strong> ${course.duracao} horas</p>
-                                <p class="card-text"><strong>Categoria:</strong> ${course.categoria}</p>
-                                <a href="curso.html?id=${course.id}" class="btn btn-primary">Ver Conteúdo</a>
+                const coursesContainer = document.getElementById('courses-container');
+                coursesContainer.innerHTML = '';
+
+                if (courses.length === 0) {
+                    coursesContainer.innerHTML = `
+                        <div class="col-12">
+                            <div class="empty-state">
+                                <img src="images/navee.gif" alt="No courses" class="img-fluid">
+                                <h3>Inicie sua Jornada Espacial!</h3>
+                                <p class="text-light">Embarque em uma aventura pelo conhecimento no TecVerso</p>
+                                <a href="cursos-ds.html" class="btn btn-space">
+                                    <i class="fas fa-rocket mr-2"></i>Explorar Cursos
+                                </a>
                             </div>
                         </div>
                     `;
-                    coursesContainer.appendChild(courseCard);
-                });
+                } else {
+                    courses.forEach(course => {
+                        const courseCard = document.createElement('div');
+                        courseCard.className = 'col-md-4 mb-4';
+                        courseCard.innerHTML = `
+                            <div class="course-card">
+                                <img src="${course.imagem_url}" alt="${course.name}">
+                                <h5>${course.name}</h5>
+                                <p>${course.description}</p>
+                                <div class="course-info">
+                                    <span><i class="fas fa-user-astronaut"></i> ${course.instrutor}</span>
+                                    <span><i class="fas fa-clock"></i> ${course.duracao}h</span>
+                                </div>
+                                <a href="curso.html?id=${course.id}" class="btn btn-space btn-block">
+                                    <i class="fas fa-space-shuttle mr-2"></i>Continuar Missão
+                                </a>
+                            </div>
+                        `;
+                        coursesContainer.appendChild(courseCard);
+                    });
+                }
+
+                setTimeout(() => {
+                    coursesContainer.classList.add('show');
+                }, 100);
+            } catch (error) {
+                console.error('Erro ao buscar cursos:', error);
             }
-    
-            // Adiciona a classe 'show' após um pequeno atraso
-            setTimeout(() => {
-                coursesContainer.classList.add('show');
-            }, 100); // Altere o tempo se necessário
-        } catch (error) {
-            console.error('Erro ao buscar cursos:', error);
         }
-    }
 
-        // Chama a função para buscar os cursos quando a página carrega
-        window.onload = fetchEnrolledCourses;
-
-
-        // dashboard.js
-document.addEventListener("DOMContentLoaded", function() {
-    const coursesContainer = document.getElementById('courses-container');
-    // Adiciona a classe fade-in ao container de cursos
-    coursesContainer.classList.add('fade-in');
-
-    // Usar setTimeout para permitir que a classe CSS seja aplicada
-    setTimeout(() => {
-        coursesContainer.classList.add('show');
-    }, 100); // Atraso de 100ms para garantir que a animação ocorra
-});
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            createStars();
+            fetchEnrolledCourses();
+        });

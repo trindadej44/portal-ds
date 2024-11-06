@@ -1,131 +1,264 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Perfil do Usuário</title>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+    <title>TecVerso - Meu Perfil</title>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        body {
-            font-family: 'Roboto', sans-serif;
-            background-color: #f0f2f5;
+        :root {
+            --primary-color: #6C3CE9;
+            --secondary-color: #2C1B47;
+            --accent-color: #FF6B6B;
+            --text-color: #E0E0FF;
+            --bg-dark: #0A0519;
+            --bg-card: rgba(44, 27, 71, 0.7);
+        }
+
+        * {
             margin: 0;
-            padding: 20px;
+            padding: 0;
+            box-sizing: border-box;
         }
+
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+            background: var(--bg-dark);
+            color: var(--text-color);
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Estrelas animadas no fundo */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                radial-gradient(2px 2px at 20px 30px, #ffffff, rgba(0,0,0,0)),
+                radial-gradient(2px 2px at 40px 70px, #ffffff, rgba(0,0,0,0)),
+                radial-gradient(2px 2px at 50px 160px, #ffffff, rgba(0,0,0,0)),
+                radial-gradient(2px 2px at 90px 40px, #ffffff, rgba(0,0,0,0)),
+                radial-gradient(2px 2px at 130px 80px, #ffffff, rgba(0,0,0,0));
+            background-repeat: repeat;
+            animation: stars 15s linear infinite;
+            z-index: 0;
+        }
+
+        @keyframes stars {
+            from {
+                transform: translateY(0);
+            }
+            to {
+                transform: translateY(-100px);
+            }
+        }
+
         #profile-container {
-            background-color: white;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            padding: 20px;
-            max-width: 600px;
-            margin: auto;
-            transition: transform 0.3s ease;
+            position: relative;
+            background: var(--bg-card);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            box-shadow: 0 8px 32px rgba(108, 60, 233, 0.2);
+            padding: 2rem;
+            max-width: 700px;
+            margin: 2rem auto;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            z-index: 1;
         }
-        #profile-container:hover {
-            transform: translateY(-5px);
-        }
-        h1 {
+
+        .logo {
             text-align: center;
-            color: #1877f2;
-            margin-bottom: 20px;
+            margin-bottom: 2rem;
+            font-size: 2.5rem;
+            background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 700;
         }
+
+        .profile-header {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+            margin-bottom: 2rem;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .profile-image-container {
+            position: relative;
+        }
+
+        .profile-image {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid var(--primary-color);
+            box-shadow: 0 0 20px rgba(108, 60, 233, 0.3);
+        }
+
+        .profile-info {
+            flex-grow: 1;
+        }
+
         .user-info {
-            margin: 15px 0;
-            padding: 10px;
-            border-radius: 5px;
-            background-color: #f7f7f7;
-            border: 1px solid #e9ebee;
-            transition: background-color 0.3s;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
-        .user-info:hover {
-            background-color: #e9eff5;
-        }
+
         .label {
-            font-weight: bold;
-            color: #555;
+            color: var(--accent-color);
+            font-weight: 500;
+            margin-right: 0.5rem;
         }
-        .add-phone {
-            color: #1877f2;
+
+        .back-button {
+            background: transparent;
+            color: var(--text-color);
+            border: 1px solid var(--primary-color);
+            padding: 0.8rem 1.5rem;
+            border-radius: 8px;
             cursor: pointer;
-            text-decoration: underline;
-            margin-top: 10px;
-            display: none;
+            transition: all 0.3s ease;
+            margin-bottom: 1rem;
+            width: auto;
         }
-        .phone-input-container {
-            display: none;
-            margin-top: 10px;
+
+        .back-button:hover {
+            background: var(--primary-color);
+            transform: translateY(-2px);
         }
-        input[type="text"] {
-            width: calc(100% - 22px);
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            margin-top: 5px;
-        }
+
         button {
-            background-color: #1877f2;
+            background: var(--primary-color);
             color: white;
             border: none;
-            padding: 10px 15px;
-            border-radius: 5px;
+            padding: 0.8rem 1.5rem;
+            border-radius: 8px;
             cursor: pointer;
-            width: 100%;
-            margin-top: 10px;
-            transition: background-color 0.3s ease;
+            transition: all 0.3s ease;
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 500;
         }
+
         button:hover {
-            background-color: #165eab;
+            background: #8150FF;
+            transform: translateY(-2px);
         }
-        .back-button {
-            background-color: transparent;
-            color: #1877f2;
-            border: 1px solid #1877f2;
-            margin-bottom: 20px;
-            transition: background-color 0.3s ease, color 0.3s ease;
+
+        input[type="text"], input[type="file"] {
+            width: 100%;
+            padding: 0.8rem;
+            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--text-color);
+            margin: 0.5rem 0;
+            font-family: 'Space Grotesk', sans-serif;
         }
-        .back-button:hover {
-            background-color: #e9eff5;
-            color: #165eab;
+
+        input[type="file"] {
+            padding: 0.5rem;
+            cursor: pointer;
         }
+
+        .phone-input-container, .upload-container {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 1.5rem;
+            border-radius: 12px;
+            margin-top: 1rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .add-phone {
+            color: var(--accent-color);
+            cursor: pointer;
+            margin: 1rem 0;
+            display: inline-block;
+            transition: color 0.3s ease;
+        }
+
+        .add-phone:hover {
+            color: #FF8F8F;
+        }
+
         .loader {
-            display: none;
-            text-align: center;
-            margin-top: 20px;
+            color: var(--primary-color);
+            font-size: 1.2rem;
+            margin: 2rem 0;
         }
-        .profile-image {
-            border-radius: 50%;
-            width: 100px;
-            height: 100px;
-            display: block;
-            margin: 0 auto;
+
+        /* Animação de pulso para o loader */
+        @keyframes pulse {
+            0% { opacity: 0.6; }
+            50% { opacity: 1; }
+            100% { opacity: 0.6; }
+        }
+
+        .loader {
+            animation: pulse 1.5s infinite ease-in-out;
+        }
+
+        /* Responsividade */
+        @media (max-width: 768px) {
+            #profile-container {
+                margin: 1rem;
+                padding: 1.5rem;
+            }
+
+            .profile-header {
+                flex-direction: column;
+                text-align: center;
+                gap: 1rem;
+            }
         }
     </style>
 </head>
 <body>
     <div id="profile-container">
-        <button class="back-button" onclick="window.location.href='/dashboard'">Voltar</button>
-        <h1>Meu Perfil</h1>
+        <button class="back-button" onclick="window.location.href='/dashboard'">
+            Voltar ao Dashboard
+        </button>
         
-        <img id="profile-image" src="https://via.placeholder.com/100" alt="Imagem de Perfil" class="profile-image">
+        <h1 class="logo">Seu Perfil</h1>
         
-        <div class="loader" id="loader">Carregando...</div>
-        <div class="user-info" id="user-info" style="display:none;"></div>
-    
-        <div class="phone-input-container" id="phone-input-container">
+        <div class="profile-header">
+            <div class="profile-image-container">
+                <img id="profile-image" src="https://via.placeholder.com/120" alt="Imagem de Perfil" class="profile-image">
+            </div>
+            
+            <div class="profile-info">
+                <div class="user-info" id="user-info" style="display:none;"></div>
+                <div class="loader" id="loader">Carregando sua jornada espacial...</div>
+            </div>
+        </div>
+
+        <div class="phone-input-container" id="phone-input-container" style="display:none;">
             <label class="label">Adicionar Telefone:</label>
             <input type="text" id="phone-input" placeholder="Digite seu telefone">
             <button id="save-phone">Salvar Telefone</button>
         </div>
-        <div class="add-phone" id="add-phone">Adicionar Telefone</div>
+        
+        <div class="add-phone" id="add-phone">+ Adicionar Telefone</div>
         
         <div class="upload-container">
-            <label class="label">Adicionar Foto de Perfil:</label>
+            <label class="label">Atualizar Foto de Perfil:</label>
             <input type="file" id="profile-input" accept="image/*">
-            <button id="upload-profile">Upload Foto</button>
+            <button id="upload-profile">Atualizar Foto</button>
         </div>
     </div>
+
     <script>
-        document.getElementById('loader').style.display = 'block'; // Show loader
+        document.getElementById('loader').style.display = 'block';
 
         fetch('http://localhost:3001/api/user-info')
             .then(response => {
@@ -135,13 +268,13 @@
                 return response.json();
             })
             .then(data => {
-                document.getElementById('loader').style.display = 'none'; // Hide loader
+                document.getElementById('loader').style.display = 'none';
                 const userInfoElement = document.getElementById('user-info');
-                userInfoElement.style.display = 'block'; // Show user info
+                userInfoElement.style.display = 'block';
                 userInfoElement.innerHTML = `
-                    <span class="label">Nome:</span> ${data.name}<br>
-                    <span class="label">Email:</span> ${data.email}<br>
-                    <span class="label">Telefone:</span> ${data.phone ? data.phone : 'Não cadastrado'}
+                    <div><span class="label">Nome:</span> ${data.name}</div>
+                    <div><span class="label">Email:</span> ${data.email}</div>
+                    <div><span class="label">Telefone:</span> ${data.phone ? data.phone : 'Não cadastrado'}</div>
                 `;
 
                 const addPhoneElement = document.getElementById('add-phone');
@@ -160,7 +293,7 @@
             })
             .catch(error => {
                 console.error('Houve um problema com a requisição:', error);
-                document.getElementById('loader').style.display = 'none'; // Hide loader
+                document.getElementById('loader').style.display = 'none';
                 document.getElementById('user-info').innerHTML = 'Erro ao carregar informações.';
             });
 
@@ -190,32 +323,25 @@
             }
         });
 
-        // Função para carregar a foto de perfil
-        // Função para carregar a foto de perfil
-// Função para carregar a foto de perfil
-const loadProfilePicture = () => {
-    fetch('http://localhost:3001/api/user-info')
-        .then(response => response.json())
-        .then(data => {
-            const profileImageSrc = data.profile_picture ? `http://localhost:3001/${data.profile_picture}` : 'https://via.placeholder.com/100'; // Atualiza a imagem
-            document.getElementById('profile-image').src = profileImageSrc; // Atualiza a imagem
-        });
-};
+        const loadProfilePicture = () => {
+            fetch('http://localhost:3001/api/user-info')
+                .then(response => response.json())
+                .then(data => {
+                    const profileImageSrc = data.profile_picture ? `http://localhost:3001/${data.profile_picture}` : 'https://via.placeholder.com/120';
+                    document.getElementById('profile-image').src = profileImageSrc;
+                });
+        };
 
-
-
-        // Chamando a função para carregar a imagem ao iniciar
         loadProfilePicture();
 
         document.getElementById('upload-profile').addEventListener('click', () => {
             const fileInput = document.getElementById('profile-input');
             const formData = new FormData();
-            const userId = 1; // Aqui você pode pegar o ID dinamicamente da resposta da API
+            const userId = 1;
 
             if (fileInput.files.length > 0) {
                 const file = fileInput.files[0];
 
-                // Validação do tipo de imagem
                 if (!file.type.startsWith('image/')) {
                     alert('Por favor, selecione um arquivo de imagem.');
                     return;
@@ -232,13 +358,13 @@ const loadProfilePicture = () => {
                     if (!response.ok) {
                         throw new Error('Erro ao atualizar a foto de perfil');
                     }
-                    // Exibe uma mensagem de sucesso
                     const successMessage = document.createElement('div');
                     successMessage.textContent = 'Foto de perfil atualizada com sucesso!';
-                    successMessage.style.color = 'green';
+                    successMessage.style.color = '#4CAF50';
                     successMessage.style.textAlign = 'center';
+                    successMessage.style.padding = '1rem';
                     document.getElementById('profile-container').prepend(successMessage);
-                    loadProfilePicture(); // Recarrega a imagem
+                    loadProfilePicture();
                 })
                 .catch(error => {
                     console.error('Erro:', error);
