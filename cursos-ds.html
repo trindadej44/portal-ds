@@ -135,6 +135,7 @@
             padding: 15px;
             overflow: hidden;
             font-family: 'Poppins', sans-serif;
+            animation: fadeIn 0.5s forwards;
         }
 
         .course-card:hover {
@@ -207,6 +208,28 @@
             }
         }
 
+        @keyframes fadeInUp {
+            0% {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px); /* Move o cartão um pouco para baixo */
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0); /* Volta para a posição original */
+    }
+}
+
         @media screen and (max-width: 768px) {
             .container {
                 flex-direction: column;
@@ -268,6 +291,8 @@
         </div>
     </div>
 
+    
+
     <div id="courseModal" class="modal">
         <div class="modal-content">
             <span class="close" id="closeModal">&times;</span>
@@ -282,42 +307,49 @@
     </div>
 
     <script>
-         fetch('http://localhost:3001/api/courses')
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                return response.json();
-            })
-            .then(data => {
-                const coursesList = document.getElementById('coursesList');
-                coursesList.innerHTML = '';
+        fetch('http://localhost:3001/api/courses')
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        return response.json();
+    })
+    .then(data => {
+        const coursesList = document.getElementById('coursesList');
+        coursesList.innerHTML = '';
 
-                data.forEach(curso => {
-                    const courseCard = document.createElement('div');
-                    courseCard.className = 'course-card';
-                    courseCard.setAttribute('data-title', curso.name);
-                    courseCard.setAttribute('data-category', curso.categoria);
-                    courseCard.setAttribute('data-instructor', curso.instrutor);
-                    courseCard.setAttribute('data-duration', curso.duracao);
-                    courseCard.setAttribute('data-description', curso.description);
-                    courseCard.setAttribute('data-image', curso.imagem_url);
-                    courseCard.innerHTML = `
-                        <img src="${curso.imagem_url}" alt="${curso.name}">
-                        <h4>${curso.name}</h4>
-                        <p><strong>Instrutor:</strong> ${curso.instrutor}</p>
-                        <p><strong>Duração:</strong> ${curso.duracao} horas</p>
-                        <p><strong>Categoria:</strong> ${curso.categoria}</p>
-                        <p>${curso.description}</p>
-                    `;
-                    courseCard.onclick = () => openModal(curso);
-                    coursesList.appendChild(courseCard);
-                });
-            })
-            .catch(error => {
-                console.error('Houve um problema com a requisição:', error);
-                document.getElementById('coursesList').innerHTML = 'Erro ao carregar cursos.';
-            });
+        data.forEach((curso, index) => {
+            const courseCard = document.createElement('div');
+            courseCard.className = 'course-card';
+            courseCard.setAttribute('data-title', curso.name);
+            courseCard.setAttribute('data-category', curso.categoria);
+            courseCard.setAttribute('data-instructor', curso.instrutor);
+            courseCard.setAttribute('data-duration', curso.duracao);
+            courseCard.setAttribute('data-description', curso.description);
+            courseCard.setAttribute('data-image', curso.imagem_url);
+            courseCard.innerHTML = `
+                <img src="${curso.imagem_url}" alt="${curso.name}">
+                <h4>${curso.name}</h4>
+                <p><strong>Instrutor:</strong> ${curso.instrutor}</p>
+                <p><strong>Duração:</strong> ${curso.duracao} horas</p>
+                <p><strong>Categoria:</strong> ${curso.categoria}</p>
+                <p>${curso.description}</p>
+            `;
+            courseCard.onclick = () => openModal(curso);
+            coursesList.appendChild(courseCard);
+
+            // Adiciona um delay na animação dos cartões de cursos
+            courseCard.style.animationDelay = `${index * 0.1}s`;
+        });
+
+        // Definir delay na animação da caixa de filtro
+        const filterBox = document.querySelector(".filter");
+        filterBox.style.animationDelay = "0.2s";
+    })
+    .catch(error => {
+        console.error('Houve um problema com a requisição:', error);
+        document.getElementById('coursesList').innerHTML = 'Erro ao carregar cursos.';
+    });
 
         function filterCourses() {
             const searchInput = document.getElementById('searchInput').value.toLowerCase();

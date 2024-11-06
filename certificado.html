@@ -12,34 +12,45 @@
             justify-content: center;
             align-items: center;
             height: 100vh;
-            background: linear-gradient(to right, #2e3047, #2a3358);
-            color: #333;
+            background: url('https://getwallpapers.com/wallpaper/full/b/4/5/75063.jpg') no-repeat center center fixed;
+            background-size: cover;
+            color: #fff;
             text-align: center;
             overflow: hidden;
             position: relative;
         }
 
         h1 {
-            font-size: 3em;
+            font-size: 3.5em;
             margin-bottom: 20px;
-            color: #fff;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.1);
+            }
+            100% {
+                transform: scale(1);
+            }
         }
 
         .certificate-container {
-    display: flex;
-    flex-direction: column; /* Alinha os itens em coluna */
-    align-items: center; /* Centraliza os itens horizontalmente */
-    justify-content: center; /* Centraliza os itens verticalmente */
-    background-color: rgba(255, 255, 255, 0.9);
-    border-radius: 10px;
-    padding: 40px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-    text-align: center;
-    position: relative;
-    z-index: 1;
-}
-
+            display: flex;
+            flex-direction: column; 
+            align-items: center; 
+            justify-content: center; 
+            background-color: rgba(20, 20, 40, 0.9);
+            border-radius: 15px;
+            padding: 40px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+            position: relative;
+            z-index: 1;
+        }
 
         .back-button {
             position: absolute;
@@ -50,13 +61,14 @@
             cursor: pointer;
             border: none;
             border-radius: 5px;
-            background-color: #ff8c00;
+            background-color: rgba(255, 140, 0, 0.8);
             color: #fff;
             transition: background-color 0.3s ease;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
         }
 
         .back-button:hover {
-            background-color: #ff7f00;
+            background-color: rgba(255, 140, 0, 1);
         }
 
         button {
@@ -65,33 +77,33 @@
             cursor: pointer;
             border: none;
             border-radius: 5px;
-            background-color: #ff8c00;
+            background-color: rgba(255, 140, 0, 0.8);
             color: #fff;
             transition: background-color 0.3s ease;
             margin-top: 20px;
             margin: 10px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
         }
 
         button:hover {
-            background-color: #ff7f00;
+            background-color: rgba(255, 140, 0, 1);
         }
 
         .label {
             font-weight: bold;
-            color: #555;
+            color: #fff;
         }
 
         #loader {
             display: none;
             font-size: 1.2em;
-            color: #555;
+            color: #fff;
         }
 
         #user-info {
             margin-top: 20px;
         }
 
-        /* Estilo do confete */
         .confetti {
             position: absolute;
             width: 10px;
@@ -111,68 +123,76 @@
         }
 
         .Documents-btn {
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-  width: fit-content;
-  height: 45px;
-  border: none;
-  padding: 0px 15px;
-  border-radius: 5px;
-  background-color: rgb(49, 49, 83);
-  gap: 10px;
-  cursor: pointer;
-  transition: all 0.3s;
-}
-.folderContainer {
-  width: 40px;
-  height: fit-content;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: flex-end;
-  position: relative;
-}
-.fileBack {
-  z-index: 1;
-  width: 80%;
-  height: auto;
-}
-.filePage {
-  width: 50%;
-  height: auto;
-  position: absolute;
-  z-index: 2;
-  transition: all 0.3s ease-out;
-}
-.fileFront {
-  width: 85%;
-  height: auto;
-  position: absolute;
-  z-index: 3;
-  opacity: 0.95;
-  transform-origin: bottom;
-  transition: all 0.3s ease-out;
-}
-.text {
-  color: white;
-  font-size: 14px;
-  font-weight: 600;
-  letter-spacing: 0.5px;
-}
-.Documents-btn:hover .filePage {
-  transform: translateY(-5px);
-}
-.Documents-btn:hover {
-  background-color: rgb(58, 58, 94);
-}
-.Documents-btn:active {
-  transform: scale(0.95);
-}
-.Documents-btn:hover .fileFront {
-  transform: rotateX(30deg);
-}
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            width: fit-content;
+            height: 45px;
+            border: none;
+            padding: 0px 15px;
+            border-radius: 5px;
+            background-color: rgba(49, 49, 83, 0.9);
+            gap: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
 
+        .folderContainer {
+            width: 40px;
+            height: fit-content;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-end;
+            position: relative;
+        }
+
+        .fileBack {
+            z-index: 1;
+            width: 80%;
+            height: auto;
+        }
+
+        .filePage {
+            width: 50%;
+            height: auto;
+            position: absolute;
+            z-index: 2;
+            transition: all 0.3s ease-out;
+        }
+
+        .fileFront {
+            width: 85%;
+            height: auto;
+            position: absolute;
+            z-index: 3;
+            opacity: 0.95;
+            transform-origin: bottom;
+            transition: all 0.3s ease-out;
+        }
+
+        .text {
+            color: #fff;
+            font-size: 14px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+
+        .Documents-btn:hover .filePage {
+            transform: translateY(-5px);
+        }
+
+        .Documents-btn:hover {
+            background-color: rgba(58, 58, 94, 0.9);
+        }
+
+        .Documents-btn:active {
+            transform: scale(0.95);
+        }
+
+        .Documents-btn:hover .fileFront {
+            transform: rotateX(30deg);
+        }
     </style>
 </head>
 <body>
@@ -203,19 +223,19 @@
                     </defs>
                 </svg>
                 <svg class="fileFront" width="160" height="79" viewBox="0 0 160 79" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M0.29306 12.2478C0.133905 9.38186 2.41499 6.97059 5.28537 6.97059H30.419H58.1902C59.5751 6.97059 60.9288 6.55982 62.0802 5.79025L68.977 1.18034C70.1283 0.410771 71.482 0 72.8669 0H77H155.462C157.87 0 159.733 2.1129 159.43 4.50232L150.443 75.5023C150.19 77.5013 148.489 79 146.474 79H7.78403C5.66106 79 3.9079 77.3415 3.79019 75.2218L0.29306 12.2478Z" fill="url(#paint0_linear_117_5)"></path>
+                    <path d="M0.29306 12.2478C0.133905 9.38186 2.41499 6.97059 5.28537 6.97059H30.419H58.1902C59.5751 6.97059 60.9288 6.55982 62.0802 5.79025L68.977 1.18034C70.1283 0.410771 71.482 0 72.8669 0H77H155.462C157.87 0 159.733 2.1129 159.733 4.5V80.5C159.733 82.8871 157.87 85 155.462 85H0C-2.41394 85 -3.01462 82.8871 -3.01462 80.5V12.2478Z" fill="url(#paint0_linear_117_8)"></path>
                     <defs>
-                        <linearGradient id="paint0_linear_117_5" x1="38.7619" y1="8.71323" x2="66.9106" y2="82.8317" gradientUnits="userSpaceOnUse">
-                            <stop stop-color="#C3BBFF"></stop>
-                            <stop offset="1" stop-color="#51469A"></stop>
+                        <linearGradient id="paint0_linear_117_8" x1="0" y1="0" x2="108" y2="107.775" gradientUnits="userSpaceOnUse">
+                            <stop stop-color="#FFB300"></stop>
+                            <stop offset="1" stop-color="#FFC700"></stop>
                         </linearGradient>
                     </defs>
                 </svg>
             </span>
-            <p class="text">Gerar Certificado</p>
+            <span class="text">Gerar Certificado</span>
         </button>
-        <div id="user-info" style="display:none;"></div>
-        <div id="loader" style="display:none;">Carregando...</div>
+        <div id="loader">Gerando seu certificado...</div>
+        <div id="user-info"></div>
     </div>
     
 

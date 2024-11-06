@@ -7,84 +7,115 @@
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <style>
         body {
-            background-color: #f0f2f5;
-            font-family: 'Roboto', sans-serif;
-            color: #444;
-        }
-        .container {
-            display: flex;
-            margin-top: 30px;
-        }
-        .sidebar {
-            position: fixed;
-            top: 50px;
-            left: 0;
-            width: 250px;
-            background: #fff;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            padding: 20px;
-            height: calc(100vh - 50px);
-            overflow-y: auto;
-        }
-        .content-area {
-            margin-left: 280px;
-            background: #fff;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            padding: 25px;
-            margin-top: 30px;
-        }
-        h2 {
-            font-size: 1.8rem;
-            color: #007bff;
-            font-weight: bold;
-            margin-bottom: 25px;
-        }
-        .video-container {
-            position: relative;
-            padding-bottom: 56.25%;
-            height: 0;
-            overflow: hidden;
-            border-radius: 10px;
-            margin-top: 15px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        }
-        .video-container iframe {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 90%;
-            height: 80%;
-            border: none;
-        }
-        .course-info {
-            background: #f9fafc;
-            padding: 15px;
-            border-radius: 8px;
-            margin-top: 20px;
-            font-size: 0.9rem;
-            color: #555;
-        }
-        .btn-primary {
-            background-color: #007bff;
-            border: none;
-            font-weight: bold;
-            transition: background-color 0.3s;
-        }
-        .btn-primary:hover {
-            background-color: #0056b3;
-        }
-        .questionario {
-            background: #f0f8ff;
-            border-radius: 8px;
-            padding: 20px;
-            margin-top: 25px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-        }
-        .question {
-            margin-bottom: 20px;
-        }
+    background-color: #f0f2f5;
+    font-family: 'Roboto', sans-serif;
+    color: #444;
+}
+
+.container {
+    display: flex;
+    margin-top: 30px;
+}
+
+.sidebar {
+    position: fixed;
+    top: 50px;
+    left: 0;
+    width: 250px;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    height: calc(100vh - 50px);
+    overflow-y: auto;
+}
+
+.sidebar h4 {
+    font-size: 1.2rem;
+    color: #007bff;
+    font-weight: bold;
+    margin-bottom: 15px;
+}
+
+.sidebar .btn {
+    font-size: 0.9rem;
+    text-align: left;
+    padding: 10px 15px;
+    border-radius: 6px;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.sidebar .btn:hover {
+    background-color: #e6f0ff;
+    color: #007bff;
+}
+
+.content-area {
+    margin-left: 280px;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+    padding: 30px;
+    margin-top: 30px;
+}
+
+h2 {
+    font-size: 2rem;
+    color: #007bff;
+    font-weight: bold;
+    margin-bottom: 25px;
+}
+
+.video-container {
+    position: relative;
+    padding-bottom: 56.25%;
+    height: 0;
+    overflow: hidden;
+    border-radius: 12px;
+    margin-top: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.video-container iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: none;
+}
+
+.course-info {
+    background: #f9fafc;
+    padding: 20px;
+    border-radius: 8px;
+    margin-top: 25px;
+    font-size: 0.9rem;
+    color: #555;
+}
+
+.btn-primary {
+    background-color: #007bff;
+    border: none;
+    font-weight: bold;
+    transition: background-color 0.3s;
+}
+
+.btn-primary:hover {
+    background-color: #0056b3;
+}
+
+.questionario {
+    background: #f0f8ff;
+    border-radius: 8px;
+    padding: 25px;
+    margin-top: 30px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.question {
+    margin-bottom: 25px;
+}
         #star-rating {
             display: flex;
             gap: 10px;

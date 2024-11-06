@@ -630,4 +630,88 @@ app.post('/api/courses', async (req, res) => {
   }
 });
 
+app.post('/api/todos', async (req, res) => {
+  if (!req.isAuthenticated()) {
+    return res.status(401).json({ error: 'Usuário não autenticado' });
+  }
 
+  const userId = req.user.id;
+  const { task } = req.body;
+
+  try {
+    const result = await pool.query(
+      'INSERT INTO todos (user_id, task) VALUES ($1, $2) RETURNING *',
+      [userId, task]
+    );
+    res.status(201).json(result.rows[0]); // Retorna a tarefa criada
+  } catch (error) {
+    console.error('Erro ao criar tarefa:', error);
+    res.status(500).json({ error: 'Erro ao criar tarefa' });
+  }
+});
+
+app.get('/api/todos', async (req, res) => {
+  if (!req.isAuthenticated()) {
+    return res.status(401).json({ error: 'Usuário não autenticado' });
+  }
+
+  const userId = req.user.id;
+
+  try {
+    const result = await pool.query('SELECT * FROM todos WHERE user_id = $1 ORDER BY created_at DESC', [userId]);
+    res.status(200).json(result.rows); // Retorna a lista de tarefas do usuário
+  } catch (error) {
+    console.error('Erro ao buscar tarefas:', error);
+    res.status(500).json({ error: 'Erro ao buscar tarefas' });
+  }
+});
+
+app.put('/api/todos/:id/completed', async (req, res) => {
+  if (!req.isAuthenticated()) {
+    return res.status(401).json({ error: 'Usuário não autenticado' });
+  }
+
+  const userId = req.user.id;
+  const { id } = req.params;
+
+  try {
+    const result = await pool.query(
+      'UPDATE todos SET completed = TRUE WHERE id = $1 AND user_id = $2 RETURNING *',
+      [id, userId]
+    );
+
+    if (result.rows.length === 0) {
+      return res.status(404).json({ error: 'Tarefa não encontrada ou usuário não autorizado' });
+    }
+
+    res.status(200).json(result.rows[0]); // Retorna a tarefa atualizada
+  } catch (error) {
+    console.error('Erro ao atualizar tarefa:', error);
+    res.status(500).json({ error: 'Erro ao atualizar tarefa' });
+  }
+});
+
+app.delete('/api/todos/:id', async (req, res) => {
+  if (!req.isAuthenticated()) {
+    return res.status(401).json({ error: 'Usuário não autenticado' });
+  }
+
+  const userId = req.user.id;
+  const { id } = req.params;
+
+  try {
+    const result = await pool.query(
+      'DELETE FROM todos WHERE id = $1 AND user_id = $2 RETURNING *',
+      [id, userId]
+    );
+
+    if (result.rows.length === 0) {
+      return res.status(404).json({ error: 'Tarefa não encontrada ou usuário não autorizado' });
+    }
+
+    res.status(200).json({ message: 'Tarefa excluída com sucesso' });
+  } catch (error) {
+    console.error('Erro ao excluir tarefa:', error);
+    res.status(500).json({ error: 'Erro ao excluir tarefa' });
+  }
+});
