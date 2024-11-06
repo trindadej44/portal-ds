@@ -23,8 +23,8 @@
         }
 
         #dashboard-container {
-            width: 80%;
-            max-width: 900px;
+            width: 90%;
+            max-width: 1000px;
             background-color: #fff;
             border-radius: 8px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -36,6 +36,14 @@
             margin-bottom: 20px;
             text-align: center;
             color: #4a90e2;
+        }
+
+        .chart-container {
+            margin: 20px 0;
+        }
+
+        canvas {
+            max-width: 100%;
         }
 
         .user-card {
@@ -67,10 +75,24 @@
             color: #555;
         }
     </style>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
     <div id="dashboard-container">
         <h1>Dashboard de Usuários</h1>
+
+        <!-- Gráficos de insights -->
+        <div class="chart-container">
+            <h2>Quantidade de Alunos por Curso</h2>
+            <canvas id="studentsPerCourseChart"></canvas>
+        </div>
+        
+        <div class="chart-container">
+            <h2>Curso com Mais Alunos</h2>
+            <canvas id="topCourseChart"></canvas>
+        </div>
+
+        <!-- Lista de Usuários -->
         <div id="user-list"></div>
     </div>
 
@@ -79,30 +101,71 @@
             try {
                 const response = await fetch('/api/dashboard-data');
                 const data = await response.json();
-                const userContainer = document.getElementById('user-list');
-                userContainer.innerHTML = ''; // Limpa o conteúdo anterior
 
-                data.forEach(user => {
+                // Configuração dos gráficos
+                const courseNames = data.courses.map(course => course.name);
+                const studentsPerCourse = data.courses.map(course => course.student_count);
+                const topCourse = data.courses.reduce((prev, current) => (prev.student_count > current.student_count) ? prev : current);
+
+                // Gráfico: Quantidade de Alunos por Curso
+                const studentsPerCourseCtx = document.getElementById('studentsPerCourseChart').getContext('2d');
+                new Chart(studentsPerCourseCtx, {
+                    type: 'bar',
+                    data: {
+                        labels: courseNames,
+                        datasets: [{
+                            label: 'Quantidade de Alunos',
+                            data: studentsPerCourse,
+                            backgroundColor: 'rgba(75, 192, 192, 0.6)',
+                            borderColor: 'rgba(75, 192, 192, 1)',
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        scales: {
+                            y: {
+                                beginAtZero: true
+                            }
+                        }
+                    }
+                });
+
+                // Gráfico: Curso com Mais Alunos
+                const topCourseCtx = document.getElementById('topCourseChart').getContext('2d');
+                new Chart(topCourseCtx, {
+                    type: 'pie',
+                    data: {
+                        labels: [topCourse.name, 'Outros Cursos'],
+                        datasets: [{
+                            data: [topCourse.student_count, studentsPerCourse.reduce((sum, count) => sum + count, 0) - topCourse.student_count],
+                            backgroundColor: ['rgba(255, 99, 132, 0.6)', 'rgba(54, 162, 235, 0.6)']
+                        }]
+                    },
+                    options: {
+                        responsive: true
+                    }
+                });
+
+                // Renderiza lista de usuários
+                const userContainer = document.getElementById('user-list');
+                userContainer.innerHTML = '';
+                data.users.forEach(user => {
                     const userCard = document.createElement('div');
                     userCard.className = 'user-card';
-
                     userCard.innerHTML = `<h3>${user.user_name} (${user.user_email})</h3>`;
-
                     if (user.courses.length > 0) {
                         const coursesList = document.createElement('ul');
                         coursesList.className = 'course-list';
-
                         user.courses.forEach(course => {
                             const courseItem = document.createElement('li');
                             courseItem.innerText = course.course_name;
                             coursesList.appendChild(courseItem);
                         });
-
                         userCard.appendChild(coursesList);
                     } else {
                         userCard.innerHTML += '<p>Não está matriculado em nenhum curso</p>';
                     }
-
                     userContainer.appendChild(userCard);
                 });
             } catch (error) {
@@ -110,7 +173,6 @@
             }
         }
 
-        // Chama a função quando a página carrega
         document.addEventListener('DOMContentLoaded', loadDashboardData);
     </script>
 </body>

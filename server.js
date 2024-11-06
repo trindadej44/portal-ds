@@ -551,10 +551,12 @@ app.delete('/api/enrollments/:course_id', async (req, res) => {
 
 // Rota para listar todos os alunos e os cursos em que estão inscritos
 app.get('/api/dashboard-data', async (req, res) => {
+
   
 
   try {
-    const result = await pool.query(`
+    // Primeira query: usuários e cursos em que estão inscritos
+    const userResult = await pool.query(`
       SELECT u.id AS user_id, u.name AS user_name, u.email AS user_email, 
              c.id AS course_id, c.name AS course_name
       FROM users u
@@ -564,7 +566,7 @@ app.get('/api/dashboard-data', async (req, res) => {
     `);
 
     // Organizar os dados no formato desejado
-    const usersWithCourses = result.rows.reduce((acc, row) => {
+    const usersWithCourses = userResult.rows.reduce((acc, row) => {
       let user = acc.find(u => u.user_id === row.user_id);
       if (!user) {
         user = {
@@ -584,12 +586,33 @@ app.get('/api/dashboard-data', async (req, res) => {
       return acc;
     }, []);
 
-    res.json(usersWithCourses);
+    // Segunda query: quantidade de alunos por curso
+    const courseResult = await pool.query(`
+      SELECT c.id AS course_id, c.name AS course_name, COUNT(e.user_id) AS student_count
+      FROM courses c
+      LEFT JOIN enrollments e ON c.id = e.course_id
+      GROUP BY c.id, c.name
+      ORDER BY student_count DESC
+    `);
+
+    // Preparar os dados de cursos e contagem de alunos
+    const coursesWithStudentCount = courseResult.rows.map(row => ({
+      course_id: row.course_id,
+      course_name: row.course_name,
+      student_count: parseInt(row.student_count, 10)
+    }));
+
+    // Enviar os dados combinados para o frontend
+    res.json({
+      users: usersWithCourses,
+      courses: coursesWithStudentCount
+    });
   } catch (error) {
     console.error('Erro ao buscar dados do dashboard:', error);
     res.status(500).json({ error: 'Erro ao buscar dados do dashboard' });
   }
 });
+
 
 app.post('/api/courses', async (req, res) => {
   const { id, name, description, instrutor, duracao, categoria, imagem_url, video_url, video_url_basico, video_url_intermediario, video_url_avancado } = req.body;
