@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
+    <script defer src="https://feedback.fish/ff.js?pid=b0e97af5fcbef9"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TecVerso - Meu Perfil</title>
@@ -221,10 +222,26 @@
                 gap: 1rem;
             }
         }
+
+        @keyframes fadeIn {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+.fade-in {
+    animation: fadeIn 1s ease-in-out;
+}
+
+
+
     </style>
 </head>
 <body>
-    <div id="profile-container">
+    <div id="profile-container" class="fade-in">
         <button class="back-button" onclick="window.location.href='/dashboard'">
             Voltar ao Dashboard
         </button>
@@ -256,78 +273,84 @@
             <button id="upload-profile">Atualizar Foto</button>
         </div>
     </div>
-
+    <button data-feedback-fish>
+        Feedback
+      </button>
     <script>
         document.getElementById('loader').style.display = 'block';
 
         fetch('http://localhost:3001/api/user-info')
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                return response.json();
-            })
-            .then(data => {
-                document.getElementById('loader').style.display = 'none';
-                const userInfoElement = document.getElementById('user-info');
-                userInfoElement.style.display = 'block';
-                userInfoElement.innerHTML = `
-                    <div><span class="label">Nome:</span> ${data.name}</div>
-                    <div><span class="label">Email:</span> ${data.email}</div>
-                    <div><span class="label">Telefone:</span> ${data.phone ? data.phone : 'Não cadastrado'}</div>
-                `;
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        return response.json();
+    })
+    .then(data => {
+        document.getElementById('loader').style.display = 'none';
+        const userInfoElement = document.getElementById('user-info');
+        userInfoElement.style.display = 'block';
+        userInfoElement.classList.add('fade-in');
+        userInfoElement.innerHTML = `
+            <div><span class="label">Nome:</span> ${data.name}</div>
+            <div><span class="label">Email:</span> ${data.email}</div>
+            <div><span class="label">Telefone:</span> ${data.phone ? data.phone : 'Não cadastrado'}</div>
+            <div><span class="label">Posição Desejada:</span> ${data.desired_position ? data.desired_position : 'Não especificado'}</div>
+            <div><span class="label">Educação:</span> ${data.education ? data.education : 'Não informada'}</div>
+        `;
 
-                const addPhoneElement = document.getElementById('add-phone');
-                const phoneInputContainer = document.getElementById('phone-input-container');
+        const addPhoneElement = document.getElementById('add-phone');
+        const phoneInputContainer = document.getElementById('phone-input-container');
 
-                if (!data.phone) {
-                    addPhoneElement.style.display = 'block';
-                } else {
-                    addPhoneElement.style.display = 'none';
-                }
+        if (!data.phone) {
+            addPhoneElement.style.display = 'block';
+        } else {
+            addPhoneElement.style.display = 'none';
+        }
 
-                addPhoneElement.addEventListener('click', () => {
-                    phoneInputContainer.style.display = 'block';
-                    addPhoneElement.style.display = 'none';
-                });
-            })
-            .catch(error => {
-                console.error('Houve um problema com a requisição:', error);
-                document.getElementById('loader').style.display = 'none';
-                document.getElementById('user-info').innerHTML = 'Erro ao carregar informações.';
-            });
-
-        document.getElementById('save-phone').addEventListener('click', () => {
-            const phone = document.getElementById('phone-input').value;
-            if (phone) {
-                fetch('http://localhost:3001/api/update-phone', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ phone })
-                })
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Erro ao atualizar telefone');
-                    }
-                    alert('Telefone atualizado com sucesso!');
-                    location.reload();
-                })
-                .catch(error => {
-                    console.error('Erro:', error);
-                    alert('Falha ao atualizar telefone.');
-                });
-            } else {
-                alert('Por favor, insira um telefone válido.');
-            }
+        addPhoneElement.addEventListener('click', () => {
+            phoneInputContainer.style.display = 'block';
+            addPhoneElement.style.display = 'none';
         });
+    })
+    .catch(error => {
+        console.error('Houve um problema com a requisição:', error);
+        document.getElementById('loader').style.display = 'none';
+        document.getElementById('user-info').innerHTML = 'Erro ao carregar informações.';
+    });
+
+            document.getElementById('save-phone').addEventListener('click', () => {
+    const phone = document.getElementById('phone-input').value;
+    if (phone) {
+        fetch('http://localhost:3001/api/update-phone', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ phone }) // Remover a chave do reCAPTCHA
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Erro ao atualizar telefone');
+            }
+            alert('Telefone atualizado com sucesso!');
+            location.reload();
+        })
+        .catch(error => {
+            console.error('Erro:', error);
+            alert('Falha ao atualizar telefone.');
+        });
+    } else {
+        alert('Por favor, insira um telefone válido.');
+    }
+});
+
 
         const loadProfilePicture = () => {
             fetch('http://localhost:3001/api/user-info')
                 .then(response => response.json())
                 .then(data => {
-                    const profileImageSrc = data.profile_picture ? `http://localhost:3001/${data.profile_picture}` : 'https://via.placeholder.com/120';
+                    const profileImageSrc = data.profile_picture ? `http://localhost:3001/${data.profile_picture}` : 'https://th.bing.com/th/id/OIP.hWXAnhbND9-qxywaONOf9gHaHa?rs=1&pid=ImgDetMain';
                     document.getElementById('profile-image').src = profileImageSrc;
                 });
         };

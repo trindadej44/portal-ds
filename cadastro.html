@@ -1,180 +1,240 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script> <!-- Inclua o particles.js -->
-	<script src="https://www.google.com/recaptcha/api.js" async defer></script>
+    <title>TecVerso - Portal do Conhecimento</title>
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 </head>
 <body>
-
-    <!-- Partículas no fundo -->
-    <div id="particles-js" style="position: absolute; width: 100%; height: 100%; z-index: -1;"></div>
-
+    
+    
     <div class="container" id="container">
+        <div class="logo-container">
+            <div class="planet-logo">
+                <div class="ring"></div>
+                <div class="planet"></div>
+                <span class="company-name">TecVerso</span>
+            </div>
+        </div>
+        
         <div class="form-container sign-up-container">
             <form action="/auth/register" method="POST">
-                <h1>Criar conta</h1>
-                <span>Use o seu melhor e-mail</span>
-                <input type="text" name="name" placeholder="Name" required />
-                <input type="email" name="email" placeholder="Email" required />
-                <input type="password" name="password" placeholder="Password" required />
-                <br>
-                <button type="submit">Cadastrar</button>
-				<br>
-				<div class="g-recaptcha" data-sitekey="6Ldaw28qAAAAAGG1xmJpHBVI6EUrFDUBNIWNv_4z"></div>
+                <h1>Explorar Novo Mundo</h1>
+                <p class="subtitle">Embarque nessa jornada pelo conhecimento</p>
+                <div class="input-group">
+                    <i class="fas fa-user"></i>
+                    <input type="text" name="name" placeholder="Seu nome de explorador" required />
+                </div>
+                <div class="input-group">
+                    <i class="fas fa-envelope"></i>
+                    <input type="email" name="email" placeholder="Seu e-mail intergalático" required />
+                </div>
+                <div class="input-group">
+                    <i class="fas fa-lock"></i>
+                    <input type="password" name="password" placeholder="Senha estelar" required />
+                </div>
+                <div class="g-recaptcha" data-sitekey="6Ldaw28qAAAAAGG1xmJpHBVI6EUrFDUBNIWNv_4z"></div>
+                <button type="submit" class="glow-button">
+                    <span class="button-content">
+                        <i class="fas fa-rocket"></i>
+                        Iniciar Jornada
+                    </span>
+                </button>
             </form>
         </div>
+        
         <div class="form-container sign-in-container">
             <form action="/auth/login" method="POST">
-                <h1>Entrar</h1>
-                <span>Insira seus dados</span>
-                <input type="email" name="email" placeholder="Email" required />
-                <input type="password" name="password" placeholder="Password" required />
-                <a href="#">Esqueceu a senha?</a>
-                <button type="submit">Entrar</button>
-				<br>
-				<div class="g-recaptcha" data-sitekey="6Ldaw28qAAAAAGG1xmJpHBVI6EUrFDUBNIWNv_4z"></div>
+                <h1>Retornar à Base</h1>
+                <p class="subtitle">Continue sua exploração pelo conhecimento</p>
+                <div class="input-group">
+                    <i class="fas fa-envelope"></i>
+                    <input type="email" name="email" placeholder="E-mail intergalático" required />
+                </div>
+                <div class="input-group">
+                    <i class="fas fa-lock"></i>
+                    <input type="password" name="password" placeholder="Senha estelar" required />
+                </div>
+                <a href="#" class="forgot-password">Perdido no espaço? Recupere sua senha</a>
+                <div class="g-recaptcha" data-sitekey="6Ldaw28qAAAAAGG1xmJpHBVI6EUrFDUBNIWNv_4z"></div>
+                <button type="submit" class="glow-button">
+                    <span class="button-content">
+                        <i class="fas fa-satellite"></i>
+                        Entrar na Órbita
+                    </span>
+                </button>
             </form>
         </div>
+        
         <div class="overlay-container">
             <div class="overlay">
                 <div class="overlay-panel overlay-left">
-                    <h1>Olá Estudante!</h1>
-                    <p>Entre com seus dados pessoais para começar sua jornada</p>
-                    <button class="ghost" id="signIn">Ou Entre</button>
+                    <h1>Bem-vindo de volta, Explorador!</h1>
+                    <p>Para continuar sua jornada pelo universo do conhecimento, faça seu login com suas credenciais</p>
+                    <button class="ghost glow-button" id="signIn">
+                        <span class="button-content">
+                            <i class="fas fa-door-open"></i>
+                            Retornar
+                        </span>
+                    </button>
                 </div>
                 <div class="overlay-panel overlay-right">
-                    <h1>Bem vindo de volta!</h1>
-                    <p>Para se manter conectado insira os seus dados para login</p>
-                    <button class="ghost" id="signUp">Ou cadastre-se</button>
+                    <h1>Olá, Viajante!</h1>
+                    <p>Embarque nessa jornada infinita de conhecimento e descobertas</p>
+                    <button class="ghost glow-button" id="signUp">
+                        <span class="button-content">
+                            <i class="fas fa-user-astronaut"></i>
+                            Explorar
+                        </span>
+                    </button>
                 </div>
             </div>
         </div>
     </div>
-	<script>
-		
-	</script>
+
 <style>
-    
-@import url('https://fonts.googleapis.com/css?family=Montserrat:400,800');
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700&family=Exo+2:wght@300;400;600&display=swap');
 
 * {
-	box-sizing: border-box;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
 }
 
 body {
-	background-color: #1b0c36;
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	flex-direction: column;
-	font-family: 'Montserrat', sans-serif;
-	height: 100vh;
-	margin: -20px 0 50px;
+    background: linear-gradient(45deg, #0B0B2B, #1B1B4B);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    font-family: 'Exo 2', sans-serif;
+    height: 100vh;
+    margin: 0;
+    position: relative;
+    overflow: hidden;
 }
 
-h1 {
-	font-weight: bold;
-	margin: 0;
+/* Animação de estrelas no fundo */
+@keyframes animateStars {
+    from {
+        transform: translateY(0px);
+    }
+    to {
+        transform: translateY(-2000px);
+    }
 }
 
-h2 {
-	text-align: center;
+#stars {
+    width: 1px;
+    height: 1px;
+    background: transparent;
+    box-shadow: 1744px 122px #fff,134px 1321px #fff,1700px 1450px #fff,1200px 850px #fff;
+    animation: animateStars 50s linear infinite;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
 }
 
-p {
-	font-size: 14px;
-	font-weight: 100;
-	line-height: 20px;
-	letter-spacing: 0.5px;
-	margin: 20px 0 30px;
+#stars2 {
+    width: 2px;
+    height: 2px;
+    background: transparent;
+    box-shadow: 1744px 122px #fff,134px 1321px #fff,1700px 1450px #fff;
+    animation: animateStars 100s linear infinite;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
 }
 
-span {
-	font-size: 12px;
-}
-
-a {
-	color: #333;
-	font-size: 14px;
-	text-decoration: none;
-	margin: 15px 0;
-}
-
-button {
-	border-radius: 20px;
-	border: 1px solid #3d39fc;
-	background-color: #472bff;
-	color: #FFFFFF;
-	font-size: 12px;
-	font-weight: bold;
-	padding: 12px 45px;
-	letter-spacing: 1px;
-	text-transform: uppercase;
-	transition: transform 80ms ease-in;
-}
-
-button:active {
-	transform: scale(0.95);
-}
-
-button:focus {
-	outline: none;
-}
-
-button.ghost {
-	background-color: transparent;
-	border-color: #FFFFFF;
-}
-
-form {
-	background-color: #FFFFFF;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	flex-direction: column;
-	padding: 0 50px;
-	height: 100%;
-	text-align: center;
-}
-
-input {
-	background-color: #eee;
-	border: none;
-	padding: 12px 15px;
-	margin: 8px 0;
-	width: 100%;
+#stars3 {
+    width: 3px;
+    height: 3px;
+    background: transparent;
+    box-shadow: 1744px 122px #fff,134px 1321px #fff,1700px 1450px #fff;
+    animation: animateStars 150s linear infinite;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
 }
 
 .container {
-	background-color: #fff;
-	border-radius: 10px;
-  	box-shadow: 0 14px 28px rgba(0,0,0,0.25), 
-			0 10px 10px rgba(0,0,0,0.22);
-	position: relative;
-	overflow: hidden;
-	width: 768px;
-	max-width: 100%;
-	min-height: 480px;
+    background: rgba(13, 14, 44, 0.95);
+    border-radius: 20px;
+    box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
+    position: relative;
+    overflow: hidden;
+    width: 868px;
+    max-width: 100%;
+    min-height: 600px;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255,255,255,0.1);
 }
 
 .form-container {
-	position: absolute;
-	top: 0;
-	height: 100%;
-	transition: all 0.6s ease-in-out;
+    position: absolute;
+    top: 0;
+    height: 100%;
+    transition: all 0.6s ease-in-out;
+}
+
+.logo-container {
+    position: absolute;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1000;
+}
+
+.planet-logo {
+    position: relative;
+    width: 60px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.planet {
+    width: 40px;
+    height: 40px;
+    background: linear-gradient(45deg, #4CA1AF, #2C3E50);
+    border-radius: 50%;
+    position: relative;
+    box-shadow: inset -5px -5px 10px rgba(0,0,0,0.5);
+}
+
+.ring {
+    position: absolute;
+    width: 60px;
+    height: 20px;
+    border: 2px solid rgba(255,255,255,0.3);
+    border-radius: 50%;
+    transform: rotateX(75deg);
+}
+
+.company-name {
+    position: absolute;
+    bottom: -30px;
+    font-family: 'Orbitron', sans-serif;
+    color: #fff;
+    font-size: 1.5em;
+    font-weight: 700;
+    text-shadow: 0 0 10px rgba(76, 161, 175, 0.5);
 }
 
 .sign-in-container {
 	left: 0;
 	width: 50%;
 	z-index: 2;
-}
-
-.container.right-panel-active .sign-in-container {
-	transform: translateX(100%);
 }
 
 .sign-up-container {
@@ -185,10 +245,15 @@ input {
 }
 
 .container.right-panel-active .sign-up-container {
-	transform: translateX(100%);
-	opacity: 1;
-	z-index: 5;
-	animation: show 0.6s;
+    transform: translateX(100%);
+    opacity: 1;
+    z-index: 5;
+    animation: show 0.2;
+}
+
+.container.right-panel-active .sign-in-container {
+    transform: translateX(100%);
+	opacity: 0;
 }
 
 @keyframes show {
@@ -214,176 +279,306 @@ input {
 	z-index: 100;
 }
 
-.container.right-panel-active .overlay-container{
-	transform: translateX(-100%);
+.container.right-panel-active .overlay-container {
+    transform: translateX(-100%);
 }
 
 .overlay {
-	background: #012dbe;
-	background: -webkit-linear-gradient(to right, #2b67ff, #4157ff);
-	background: linear-gradient(to right, #2b3dff, #4441ff);
-	background-repeat: no-repeat;
-	background-size: cover;
-	background-position: 0 0;
-	color: #FFFFFF;
-	position: relative;
-	left: -100%;
-	height: 100%;
-	width: 200%;
-  	transform: translateX(0);
-	transition: transform 0.6s ease-in-out;
+    background: linear-gradient(to right, #4CA1AF, #2C3E50);
+    background-size: cover;
+    background-position: 0 0;
+    color: #FFFFFF;
+    position: relative;
+    left: -100%;
+    height: 100%;
+    width: 200%;
+    transform: translateX(0);
+    transition: transform 0.6s ease-in-out;
 }
 
 .container.right-panel-active .overlay {
-  	transform: translateX(50%);
+    transform: translateX(50%);
 }
 
 .overlay-panel {
-	position: absolute;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	flex-direction: column;
-	padding: 0 40px;
-	text-align: center;
-	top: 0;
-	height: 100%;
-	width: 50%;
-	transform: translateX(0);
-	transition: transform 0.6s ease-in-out;
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    padding: 0 40px;
+    text-align: center;
+    top: 0;
+    height: 100%;
+    width: 50%;
+    transform: translateX(0);
+    transition: transform 0.6s ease-in-out;
 }
 
 .overlay-left {
-	transform: translateX(-20%);
+    transform: translateX(-20%);
 }
 
 .container.right-panel-active .overlay-left {
-	transform: translateX(0);
+    transform: translateX(0);
 }
 
 .overlay-right {
-	right: 0;
-	transform: translateX(0);
+    right: 0;
+    transform: translateX(0);
 }
 
 .container.right-panel-active .overlay-right {
-	transform: translateX(20%);
+    transform: translateX(20%);
 }
 
-.social-container {
-	margin: 20px 0;
-}
-
-.social-container a {
-	border: 1px solid #DDDDDD;
-	border-radius: 50%;
-	display: inline-flex;
-	justify-content: center;
-	align-items: center;
-	margin: 0 5px;
-	height: 40px;
-	width: 40px;
-}
-
-footer {
-    background-color: #222;
-    color: #fff;
-    font-size: 14px;
-    bottom: 0;
-    position: fixed;
-    left: 0;
-    right: 0;
+form {
+    background: transparent;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    padding: 0 50px;
+    height: 100%;
     text-align: center;
-    z-index: 999;
 }
 
-footer p {
+h1 {
+    font-family: 'Orbitron', sans-serif;
+    font-weight: bold;
+    margin: 0;
+    color: #fff;
+    text-shadow: 0 0 10px rgba(76, 161, 175, 0.5);
+}
+
+.subtitle {
+    font-size: 14px;
+    font-weight: 300;
+    line-height: 20px;
+    letter-spacing: 0.5px;
+    margin: 20px 0 30px;
+    color: #b3b3b3;
+}
+
+.input-group {
+    position: relative;
+    width: 100%;
     margin: 10px 0;
 }
 
-footer i {
-    color: red;
+.input-group i {
+    position: absolute;
+    left: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #4CA1AF;
+    font-size: 1.1em;
 }
 
-footer a {
-    color: #3c97bf;
+input {
+    background-color: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 12px 15px 12px 45px;
+    margin: 8px 0;
+    width: 100%;
+    border-radius: 25px;
+    color: #fff;
+    font-size: 14px;
+    transition: all 0.3s ease;
+}
+
+input:focus {
+    outline: none;
+    background-color: rgba(255, 255, 255, 0.1);
+    border-color: #4CA1AF;
+    box-shadow: 0 0 15px rgba(76, 161, 175, 0.3);
+}
+
+input::placeholder {
+    color: #b3b3b3;
+}
+
+.forgot-password {
+    color: #b3b3b3;
+    font-size: 14px;
     text-decoration: none;
+    margin: 15px 0;
+    transition: color 0.3s ease;
 }
-</style>
 
-<script>
-     const signUpButton = document.getElementById('signUp');
-    const signInButton = document.getElementById('signIn');
-    const container = document.getElementById('container');
+.forgot-password:hover {
+    color: #4CA1AF;
+    text-shadow: 0 0 5px rgba(76, 161, 175, 0.5);
+}
 
-    signUpButton.addEventListener('click', () => {
-        container.classList.add("right-panel-active");
-    });
+.glow-button {
+    border-radius: 25px;
+    border: none;
+    background: linear-gradient(45deg, #4CA1AF, #2C3E50);
+    color: #FFFFFF;
+    font-size: 12px;
+    font-weight: bold;
+    padding: 12px 45px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    margin: 20px 0;
+}
 
-    signInButton.addEventListener('click', () => {
-        container.classList.remove("right-panel-active");
-    });
+.glow-button::before {
+    content: '';
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    right: -2px;
+    bottom: -2px;
+    background: linear-gradient(45deg, #4CA1AF, #2C3E50, #4CA1AF);
+    border-radius: 25px;
+    z-index: -1;
+    animation: glowing 1.5s linear infinite;
+}
 
-particlesJS("particles-js", {
-        "particles": {
-            "number": {
-                "value": 110,
-                "density": {
-                    "enable": true,
-                    "value_area": 800
+@keyframes glowing {
+                0% { opacity: 1; }
+                50% { opacity: 0.7; }
+                100% { opacity: 1; }
+            }
+
+            .button-content {
+                display: flex;
+                align-items: center;
+                gap: 8px;
+            }
+
+            .glow-button:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 0 20px rgba(76, 161, 175, 0.5);
+            }
+
+            .glow-button:active {
+                transform: translateY(0);
+            }
+
+            .glow-button.ghost {
+                background: transparent;
+                border: 2px solid #FFFFFF;
+            }
+
+            .glow-button.ghost:hover {
+                background: rgba(255, 255, 255, 0.1);
+            }
+
+            /* Animação para o planeta */
+            @keyframes rotatePlanet {
+                from { transform: rotate(0deg); }
+                to { transform: rotate(360deg); }
+            }
+
+            .planet {
+                animation: rotatePlanet 20s linear infinite;
+            }
+
+            /* Responsividade */
+            @media (max-width: 768px) {
+                .container {
+                    min-height: 800px;
                 }
-            },
-            "color": { "value": "#ffffff" },
-            "shape": {
-                "type": "circle",
-                "stroke": { "width": 0, "color": "#000000" },
-                "polygon": { "nb_sides": 5 }
-            },
-            "opacity": {
-                "value": 0.5,
-                "random": false,
-                "anim": { "enable": false, "speed": 1, "opacity_min": 0.1, "sync": false }
-            },
-            "size": {
-                "value": 3,
-                "random": true,
-                "anim": { "enable": false, "speed": 40, "size_min": 0.1, "sync": false }
-            },
-            "line_linked": {
-                "enable": true,
-                "distance": 150,
-                "color": "#ffffff",
-                "opacity": 0.4,
-                "width": 1
-            },
-            "move": {
-                "enable": true,
-                "speed": 3,
-                "direction": "none",
-                "random": false,
-                "straight": false,
-                "out_mode": "out",
-                "bounce": false,
-                "attract": { "enable": false, "rotateX": 600, "rotateY": 1200 }
+
+                .form-container {
+                    width: 100%;
+                    height: 50%;
+                }
+
+                .overlay-container {
+                    width: 100%;
+                    height: 50%;
+                    top: 50%;
+                    left: 0;
+                    transform: translateY(0);
+                }
+
+                .overlay {
+                    height: 200%;
+                    transform: translateY(-50%);
+                }
+
+                .container.right-panel-active .sign-up-container {
+                    transform: translateY(-100%);
+                }
+
+                .container.right-panel-active .sign-in-container {
+                    transform: translateY(100%);
+                }
+
+                .overlay-panel {
+                    width: 100%;
+                    height: 50%;
+                }
+
+                .overlay-left {
+                    top: 50%;
+                }
+
+                .container.right-panel-active .overlay-container {
+                    transform: translateY(-100%);
+                }
             }
-        },
-        "interactivity": {
-            "detect_on": "canvas",
-            "events": {
-                "onhover": { "enable": true, "mode": "repulse" },
-                "onclick": { "enable": true, "mode": "push" },
-                "resize": true
-            },
-            "modes": {
-                "grab": { "distance": 400, "line_linked": { "opacity": 1 } },
-                "bubble": { "distance": 400, "size": 40, "duration": 2, "opacity": 8, "speed": 3 },
-                "repulse": { "distance": 200, "duration": 0.4 },
-                "push": { "particles_nb": 4 },
-                "remove": { "particles_nb": 2 }
+
+            /* Animação do reCAPTCHA */
+            .g-recaptcha {
+                margin: 15px 0;
+                transform: scale(0.9);
+                transform-origin: 0 0;
+                transition: all 0.3s ease;
             }
-        },
-        "retina_detect": true
-    });
-</script>
+
+            .g-recaptcha:hover {
+                transform: scale(1);
+            }
+        </style>
+
+        <script>
+            // Script para alternar entre os painéis de login e registro
+            const signUpButton = document.getElementById('signUp');
+            const signInButton = document.getElementById('signIn');
+            const container = document.getElementById('container');
+
+            signUpButton.addEventListener('click', () => {
+                container.classList.add('right-panel-active');
+            });
+
+            signInButton.addEventListener('click', () => {
+                container.classList.remove('right-panel-active');
+            });
+
+            
+            // Efeito de parallax suave nas estrelas
+            document.addEventListener('mousemove', (e) => {
+                const stars = document.querySelectorAll('#stars, #stars2, #stars3');
+                const x = e.clientX / window.innerWidth;
+                const y = e.clientY / window.innerHeight;
+                
+                stars.forEach((star, index) => {
+                    const movement = (index + 1) * 2;
+                    star.style.transform = `translate(${x * movement}px, ${y * movement}px)`;
+                });
+            });
+
+            // Adicionar efeito de brilho nos inputs quando focados
+            const inputs = document.querySelectorAll('input');
+            inputs.forEach(input => {
+                input.addEventListener('focus', () => {
+                    input.parentElement.style.boxShadow = '0 0 15px rgba(76, 161, 175, 0.3)';
+                });
+                
+                input.addEventListener('blur', () => {
+                    input.parentElement.style.boxShadow = '';
+                });
+            });
+        </script>
+    </div>
 </body>
 </html>

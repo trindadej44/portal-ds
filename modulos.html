@@ -1,210 +1,446 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Comunidade</title>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+    <title>TecVerso - Explorando o Universo do Conhecimento</title>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Orbitron:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
     <style>
-        body {
-            font-family: 'Roboto', sans-serif;
-            background: linear-gradient(135deg, #1a2a6c, #912a18, #048bda);
-            color: #ffffff;
+        :root {
+            --space-blue: #1a1b4b;
+            --nebula-purple: #4b2064;
+            --cosmic-pink: #ff6b9f;
+            --star-yellow: #ffe66d;
+            --meteor-orange: #ff7b54;
+            --galaxy-gradient: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+        }
+
+        * {
             margin: 0;
             padding: 0;
-            background-size: 400% 400%;
-            animation: gradientBG 15s ease infinite;
+            box-sizing: border-box;
         }
 
-        @keyframes gradientBG {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+            background: var(--galaxy-gradient);
+            color: #ffffff;
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
         }
 
-        @keyframes gradientBG {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
+        /* Animação de estrelas no fundo */
+        .stars {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
         }
 
-        /* Definição da animação */
+        .star {
+            position: absolute;
+            background: #ffffff;
+            border-radius: 50%;
+            animation: twinkle var(--duration) infinite;
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.2; }
+            50% { opacity: 1; }
+        }
+
+        .navbar {
+            background: rgba(26, 27, 75, 0.95);
+            padding: 1rem 2rem;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2rem;
+            color: var(--cosmic-pink);
+            text-shadow: 0 0 10px rgba(255, 107, 159, 0.5);
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .logo span {
+            color: var(--star-yellow);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .nav-link {
+            color: #ffffff;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .nav-link:hover {
+            background: rgba(255, 107, 159, 0.2);
+            box-shadow: 0 0 15px rgba(255, 107, 159, 0.3);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 100px auto 2rem;
+            padding: 2rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .post-box {
+            background: rgba(26, 27, 75, 0.8);
+            border-radius: 20px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transform: translateY(0);
+            transition: all 0.3s ease;
+        }
+
+        .post-box:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 40px rgba(255, 107, 159, 0.2);
+        }
+
+        .post-box h2 {
+            font-family: 'Orbitron', sans-serif;
+            color: var(--cosmic-pink);
+            margin-bottom: 1.5rem;
+        }
+
+        .input-group {
+            margin-bottom: 1.5rem;
+        }
+
+        input[type="text"],
+        textarea {
+            width: 100%;
+            padding: 1rem;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.05);
+            color: #ffffff;
+            font-family: 'Space Grotesk', sans-serif;
+            transition: all 0.3s ease;
+        }
+
+        input[type="text"]:focus,
+        textarea:focus {
+            outline: none;
+            border-color: var(--cosmic-pink);
+            box-shadow: 0 0 15px rgba(255, 107, 159, 0.3);
+        }
+
+        .file-input-wrapper {
+            position: relative;
+            margin-bottom: 1rem;
+        }
+
+        input[type="file"] {
+            opacity: 0;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            cursor: pointer;
+        }
+
+        .file-input-label {
+            display: block;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            border: 1px dashed rgba(255, 255, 255, 0.2);
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .file-input-label:hover {
+            background: rgba(255, 107, 159, 0.1);
+            border-color: var(--cosmic-pink);
+        }
+
+        button {
+            background: linear-gradient(135deg, var(--cosmic-pink), var(--nebula-purple));
+            color: white;
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 10px;
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 107, 159, 0.4);
+        }
+
+        button::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transform: rotate(45deg);
+            animation: button-shine 3s infinite;
+        }
+
+        @keyframes button-shine {
+            0% { transform: translateX(-100%) rotate(45deg); }
+            100% { transform: translateX(100%) rotate(45deg); }
+        }
+
+        .post {
+            background: rgba(26, 27, 75, 0.8);
+            border-radius: 20px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            animation: fadeInUp 0.6s ease forwards;
+            opacity: 0;
+        }
+
+        .post h3 {
+            font-family: 'Orbitron', sans-serif;
+            color: var(--star-yellow);
+            margin-bottom: 1rem;
+        }
+
+        .post-content {
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+        }
+
+        .post img {
+            width: 100%;
+            border-radius: 10px;
+            margin: 1rem 0;
+            transition: transform 0.3s ease;
+        }
+
+        .post img:hover {
+            transform: scale(1.02);
+        }
+
+        .interaction-bar {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin: 1rem 0;
+        }
+
+        .likes-count {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--cosmic-pink);
+        }
+
+        .comments-section {
+            margin-top: 1.5rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .comment {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            animation: fadeIn 0.3s ease forwards;
+        }
+
+        .comment-form {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        margin-top: 1rem;
+    }
+
+    .comment-form input {
+        width: 100%;
+        padding: 1rem;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        border-radius: 12px;
+        background: rgba(255, 255, 255, 0.05);
+        color: #ffffff;
+        font-family: 'Space Grotesk', sans-serif;
+        transition: all 0.3s ease;
+    }
+
+    .comment-form input:focus {
+        outline: none;
+        border-color: var(--cosmic-pink);
+        box-shadow: 0 0 15px rgba(255, 107, 159, 0.3);
+    }
+
+    .comment-form button {
+        background: linear-gradient(135deg, var(--cosmic-pink), var(--nebula-purple));
+        color: white;
+        padding: 0.8rem 1.5rem;
+        border: none;
+        border-radius: 12px;
+        font-family: 'Space Grotesk', sans-serif;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .comment-form button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(255, 107, 159, 0.4);
+    }
+
+    .comment-form button::after {
+        content: '';
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+        transform: rotate(45deg);
+        animation: button-shine 3s infinite;
+    }
+
+    @keyframes button-shine {
+        0% { transform: translateX(-100%) rotate(45deg); }
+        100% { transform: translateX(100%) rotate(45deg); }
+    }
+
         @keyframes fadeInUp {
-            0% {
+            from {
                 opacity: 0;
                 transform: translateY(20px);
             }
-            100% {
+            to {
                 opacity: 1;
                 transform: translateY(0);
             }
         }
 
-        .navbar {
-            background-color: rgba(0, 0, 0, 0.7);
-            padding: 15px 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            color: #f0f2f5;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
         }
 
-        .navbar h1 {
-            font-size: 28px;
-            margin: 0;
-            color: #f0f2f5;
+        /* Estilização da barra de rolagem */
+        ::-webkit-scrollbar {
+            width: 10px;
         }
 
-        .navbar a {
-            color: #4267B2;
-            text-decoration: none;
-            padding: 8px 15px;
-            border-radius: 8px;
-            transition: background-color 0.3s;
+        ::-webkit-scrollbar-track {
+            background: rgba(26, 27, 75, 0.5);
         }
 
-        .navbar a:hover {
-            background-color: rgba(255, 255, 255, 0.2);
+        ::-webkit-scrollbar-thumb {
+            background: var(--cosmic-pink);
+            border-radius: 5px;
         }
 
-        .container {
-            max-width: 800px;
-            margin: 30px auto;
-            padding: 0 20px;
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--nebula-purple);
         }
 
-        .post-box, .post {
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 12px;
-            padding: 20px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
-            margin-bottom: 20px;
-            color: #f0f2f5;
-            backdrop-filter: blur(6px);
-            position: relative;
-            opacity: 0; /* Iniciar invisível */
-            animation: fadeInUp 0.6s ease forwards;
-        }
-        .post-box input,
-        .post-box textarea {
-            width: 100%;
-            padding: 12px;
-            border: 1px solid #666;
-            border-radius: 8px;
-            margin-top: 10px;
-            color: #f0f2f5;
-            background-color: rgba(255, 255, 255, 0.1);
-        }
+        /* Responsividade */
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
 
-        .post-box button {
-            background: linear-gradient(135deg, #4267B2, #365899);
-            color: #f0f2f5;
-            padding: 12px 24px;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 16px;
-            transition: background 0.3s;
-        }
+            .navbar {
+                padding: 1rem;
+                flex-direction: column;
+                gap: 1rem;
+            }
 
-        .post-box button:hover {
-            background: linear-gradient(135deg, #365899, #283b6a);
-        }
+            .nav-links {
+                flex-direction: column;
+                align-items: center;
+            }
 
-        .post h3 {
-            font-size: 22px;
-            color: #f0f2f5;
-            margin-top: 0;
-        }
+            .post {
+                padding: 1.5rem;
+            }
 
-        .post img {
-            max-width: 100%;
-            border-radius: 8px;
-            margin-top: 10px;
-            transition: transform 0.3s;
+            .comment-form {
+                flex-direction: column;
+            }
         }
-
-        .post img:hover {
-            transform: scale(1.05);
-        }
-
-        .post button {
-            margin-top: 15px;
-            background: linear-gradient(135deg, #4267B2, #365899);
-            color: white;
-            padding: 8px 12px;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: background 0.3s;
-        }
-
-        .post button:hover {
-            background: linear-gradient(135deg, #365899, #283b6a);
-        }
-
-        .likes-count {
-            font-size: 15px;
-            color: #c4c4c4;
-            margin-top: 5px;
-        }
-
-        .comments-section {
-            margin-top: 10px;
-            border-top: 1px solid #333;
-            padding-top: 10px;
-        }
-
-        .comments-section .comment {
-            background-color: rgba(255, 255, 255, 0.1);
-            border-radius: 8px;
-            padding: 10px;
-            margin-bottom: 10px;
-        }
-
-        .comments-section input {
-            width: calc(100% - 50px);
-            border: 1px solid #666;
-            border-radius: 8px;
-            padding: 8px;
-            color: #f0f2f5;
-            background-color: rgba(255, 255, 255, 0.1);
-        }
-
-        .comments-section button {
-            background: linear-gradient(135deg, #4267B2, #365899);
-            color: white;
-            padding: 8px;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: background 0.3s;
-        }
-
-        .comments-section button:hover {
-            background: linear-gradient(135deg, #365899, #283b6a);
-        }
+        
     </style>
 </head>
 <body>
+    <div class="stars"></div>
 
-    <div class="navbar">
-        <h1>Comunidade</h1>
-        <a href="/dashboard">🔙 Voltar para o Dashboard</a>
-    </div>
+    <nav class="navbar">
+        <div class="logo">
+            Tec<span>Verso</span> 🚀
+        </div>
+        <div class="nav-links">
+            <a href="/dashboard" class="nav-link">Dashboard</a>
+            <a href="/cursos-ds.html" class="nav-link">Cursos</a>
+            <a href="/perfil.html" class="nav-link">Meu Perfil</a>
+        </div>
+    </nav>
 
     <div class="container">
         <div id="article-form" class="post-box">
-            <h2>Postar novo artigo</h2>
-            <input id="title" type="text" placeholder="Título" required />
-            <textarea id="content" placeholder="Conteúdo" required></textarea>
-            <input id="image" type="file" />
-            <button onclick="postArticle()">Postar Artigo</button>
+            <h2>🌟 Compartilhe seu Conhecimento</h2>
+            <div class="input-group">
+                <input id="title" type="text" placeholder="Título do seu artigo" required />
+            </div>
+            <div class="input-group">
+                <textarea id="content" placeholder="Compartilhe suas ideias..." rows="5" required></textarea>
+            </div>
+            <div class="file-input-wrapper">
+                <div class="file-input-label">
+                    📸 Adicionar Imagem
+                </div>
+                <input id="image" type="file" accept="image/*" />
+            </div>
+            <button onclick="postArticle()">🚀 Publicar</button>
         </div>
 
         <div id="articles-list">
-            <!-- Os posts aparecerão aqui com a animação -->
+            <!-- Os posts serão inseridos aqui -->
         </div>
     </div>
     <script>
@@ -267,14 +503,17 @@
 
         articleDiv.innerHTML = `
     <h3>${article.title}</h3>
-    <p><strong>Autor:</strong> ${article.author_name}</p>
-    <p>${article.content}</p>
+    <p><strong>Autor:</strong> ${article.author_name}</p><br>
+    <p>${article.content}</p><br>
     ${article.image_url ? `<img src="${article.image_url}" alt="Imagem do Artigo" />` : ''}
     <div class="likes-count">Curtidas: ${article.like_count || 0}</div> <!-- Corrigido aqui -->
-    <button onclick="likeArticle(${article.id})">👍</button>
+    <button onclick="likeArticle(${article.id})">💗</button>
     <div id="comments-${article.id}" class="comments-section"></div>
     <div>
-        <input id="comment-input-${article.id}" placeholder="Deixe um comentário..." />
+        <div class="comment-form">
+    <input id="comment-input-${article.id}" placeholder="Deixe um comentário..." />
+    <br>
+</div>
         <button onclick="postComment(${article.id})">Postar</button>
     </div>
 `;

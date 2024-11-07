@@ -44,31 +44,16 @@ router.get('/user-info', (req, res) => {
 });
 
 // Rota para atualizar o telefone do usuário
-router.post('/update-phone', async (req, res) => {
+// Rota para atualizar o telefone do usuário
+router.post('/update-phone', (req, res) => {
     if (!req.session.user || !req.session.user.id) {
         return res.status(401).send('Usuário não autenticado');
     }
 
     const userId = req.session.user.id;
-    const { phone, 'g-recaptcha-response': recaptchaResponse } = req.body;
+    const { phone } = req.body; // Não precisamos mais de 'g-recaptcha-response'
 
-    // Verificação do reCAPTCHA
-    try {
-        const response = await axios.post(`https://www.google.com/recaptcha/api/siteverify`, null, {
-            params: {
-                secret: RECAPTCHA_SECRET_KEY,
-                response: recaptchaResponse
-            }
-        });
-
-        const { success } = response.data;
-        if (!success) {
-            return res.status(400).send('Falha na verificação do reCAPTCHA');
-        }
-    } catch (error) {
-        return res.status(500).send('Erro ao verificar o reCAPTCHA');
-    }
-
+    // Atualiza o telefone no banco de dados
     db.query('UPDATE users SET phone = $1 WHERE id = $2', [phone, userId], (error, results) => {
         if (error) {
             return res.status(500).send('Erro ao atualizar telefone');
@@ -76,6 +61,7 @@ router.post('/update-phone', async (req, res) => {
         res.send('Telefone atualizado com sucesso');
     });
 });
+
 
 // Rota para atualizar a foto de perfil
 router.post('/update-profile-picture', upload.single('profilePicture'), (req, res) => {

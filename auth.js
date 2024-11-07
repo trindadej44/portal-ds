@@ -185,6 +185,11 @@ router.post('/teacher-login', async (req, res) => {
           return res.status(401).json({ error: 'Senha incorreta' });
       }
 
+      // Verificação do campo 'role' para garantir que o usuário é um 'teacher'
+      if (user.role !== 'teacher') {
+          return res.status(403).json({ error: 'Acesso restrito a professores' });
+      }
+
       // Criar sessão com informações do usuário
       req.session.user = {
           id: user.id,
@@ -201,4 +206,5 @@ router.post('/teacher-login', async (req, res) => {
       res.status(500).json({ error: 'Erro interno do servidor' });
   }
 });
+
 module.exports = router;

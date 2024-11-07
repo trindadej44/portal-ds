@@ -715,3 +715,4 @@ app.delete('/api/todos/:id', async (req, res) => {
     res.status(500).json({ error: 'Erro ao excluir tarefa' });
   }
 });
+
